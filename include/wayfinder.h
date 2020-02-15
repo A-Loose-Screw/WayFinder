@@ -62,6 +62,9 @@ class WayFinder {
     double RotationsToTarget(double p1x, double p1y, double p2x, double p2y);
     double InternalPID(double dt, double goal, double input);
     double InverseNumber(double input);
+    void EndCase();
+    void EndCheckPoint();
+    void StartWaypoint();
 
     // Drivetrain
     wml::Drivetrain &_drivetrain;
@@ -85,4 +88,5 @@ class WayFinder {
 
     int CaseNumber = 1;
     bool WayPointComplete = false;
+    bool WayPointStart = true;
 };

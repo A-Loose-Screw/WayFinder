@@ -128,52 +128,90 @@ bool WayFinder::GetWayPointComplete() {
   }
 }
 
+void WayFinder::StartWaypoint() {
+  _drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
+  _drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
+  _drivetrain.GetConfig().gyro->Reset();
+  WayPointStart = false;
+}
+
+void WayFinder::EndCase() {
+  CaseNumber = 1;
+  WayPointComplete = true;
+  WayPointStart = true;
+  _drivetrain.GetConfig().gyro->Reset();
+  _drivetrain.Set(0, 0);
+}
+
+void WayFinder::EndCheckPoint() {
+  CaseNumber++;
+  _drivetrain.GetConfig().gyro->Reset();
+  _drivetrain.Set(0, 0);
+  WayPointStart = true;
+  WayPointComplete = false;
+}
+
 void WayFinder::GotoWaypoint(double wypt1x, double wypt1y, double startAngle, double wypt2x, double wypt2y, double endAngle, bool reverse, double dt) {
+
+  // Zero if start of new Waypoint/Checkpoint
+  if (WayPointStart) {
+    WayFinder::StartWaypoint();
+  }
+
   // Get the distance to the target in rotations
   _DistanceInRotations = RotationsToTarget(wypt1x, wypt1y, wypt2x, wypt2y);
   switch (CaseNumber) {
     case 1:
-      // Turn to Start Angle
-      if (abs(startAngle) > 0) {
-        if (abs(_drivetrain.GetConfig().gyro->GetAngle()) < abs(startAngle)) {
-          TurnToTarget(dt, _drivetrain.GetConfig().gyro->GetAngle(), startAngle, reverse);
+      if (startAngle > 0 || startAngle < 0) {
+        if(startAngle < 0) {
+          if (_drivetrain.GetConfig().gyro->GetAngle() > startAngle) {
+            WayFinder::TurnToTarget(dt, _drivetrain.GetConfig().gyro->GetAngle(), startAngle, reverse);
+          } else {
+            WayFinder::EndCheckPoint();
+          }
+        } else if (startAngle > 0) {
+          if (_drivetrain.GetConfig().gyro->GetAngle() < startAngle) {
+            WayFinder::TurnToTarget(dt, _drivetrain.GetConfig().gyro->GetAngle(), startAngle, reverse);
+          } else {
+            WayFinder::EndCheckPoint();
+          }
+        } else {
+          WayFinder::EndCheckPoint();
         }
       } else {
-        CaseNumber++;
-        _drivetrain.GetConfig().gyro->Reset();
-        _drivetrain.Set(0, 0);
-        WayPointComplete = false;
+        WayFinder::EndCheckPoint();
       }
     break;
 
     case 2:
       // Drive to target
       if (abs(_drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations()) < _DistanceInRotations || abs(_drivetrain.GetConfig().rightDrive.encoder->GetEncoderRotations()) < _DistanceInRotations) {
-        DriveToTarget(dt, _DistanceInRotations, reverse);
+        WayFinder::DriveToTarget(dt, _DistanceInRotations, reverse);
       } else {
-        CaseNumber++;
-        _drivetrain.GetConfig().gyro->Reset();
-        _drivetrain.Set(0, 0);
-        WayPointComplete = false;
+        WayFinder::EndCheckPoint();
       }
     break;
 
     case 3:
       // Turn to End Angle
-      if (abs(endAngle) > 0) {
-        if (abs(_drivetrain.GetConfig().gyro->GetAngle()) < abs(endAngle)) {
-          TurnToTarget(dt, _drivetrain.GetConfig().gyro->GetAngle(), endAngle, reverse);
+      if (endAngle > 0 || endAngle < 0) {
+        if(endAngle < 0) {
+          if (_drivetrain.GetConfig().gyro->GetAngle() > endAngle) {
+            WayFinder::TurnToTarget(dt, _drivetrain.GetConfig().gyro->GetAngle(), endAngle, reverse);
+          } else {
+            WayFinder::EndCase();
+          }
+        } else if (endAngle > 0) {
+          if (_drivetrain.GetConfig().gyro->GetAngle() < endAngle) {
+            WayFinder::TurnToTarget(dt, _drivetrain.GetConfig().gyro->GetAngle(), endAngle, reverse);
+          } else {
+            WayFinder::EndCase();
+          }
         } else {
-          CaseNumber = 1;
-          WayPointComplete = true;
-          _drivetrain.GetConfig().gyro->Reset();
-          _drivetrain.Set(0, 0);
+          WayFinder::EndCase();
         }
       } else {
-        CaseNumber = 1;
-        WayPointComplete = true;
-        _drivetrain.GetConfig().gyro->Reset();
-        _drivetrain.Set(0, 0);
+        WayFinder::EndCase();
       }
     break;
   }
