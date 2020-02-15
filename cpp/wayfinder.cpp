@@ -50,14 +50,14 @@ double WayFinder::InverseNumber(double input) {
 
 // Using the provided PID and gyro, turn to the target
 void WayFinder::TurnToTarget(double dt, double input, double goal, bool reverse) {
-  double turnSpeed = InternalPID(dt, goal, input);
-
-  turnSpeed *= _MaxTurnSpeed;
-  if (goal < 0) {
-    _drivetrain.Set(-turnSpeed, abs(turnSpeed));
-  } else if (goal > 0) {
-    _drivetrain.Set(abs(turnSpeed), -turnSpeed);
+  double turnSpeed = goal < 0 ? -(InternalPID(abs(dt), abs(goal), abs(input))) : goal > 0 ? (InternalPID(abs(dt), abs(goal), abs(input))) : 0;
+  if (goal > 0) {
+    turnSpeed *= _MaxTurnSpeed;
+  } else if (goal < 0) {
+    turnSpeed = -(abs(turnSpeed) * _MaxTurnSpeed);
   }
+
+  _drivetrain.Set(turnSpeed, -turnSpeed);
 }
 
 // Get Average distance
@@ -82,8 +82,8 @@ void WayFinder::DriveToTarget(double dt, double goal , bool reverse) {
 
   if (reverse) {
     // Drive straight using gyro
-    LeftSpeed += (_drivetrain.GetConfig().gyro->GetAngle() * (_kP));
-    RightSpeed -= (_drivetrain.GetConfig().gyro->GetAngle() * (_kP));
+    LeftSpeed += (_drivetrain.GetConfig().gyro->GetAngle() * (_kP/2));
+    RightSpeed -= (_drivetrain.GetConfig().gyro->GetAngle() * (_kP/2));
 
     // Inverse Power
     LeftSpeed = InverseNumber(LeftSpeed);
@@ -174,12 +174,15 @@ void WayFinder::GotoWaypoint(double wypt1x, double wypt1y, double startAngle, do
             WayFinder::TurnToTarget(dt, _drivetrain.GetConfig().gyro->GetAngle(), startAngle, reverse);
           } else {
             WayFinder::EndCheckPoint();
+            break;
           }
         } else {
           WayFinder::EndCheckPoint();
+          break;
         }
       } else {
         WayFinder::EndCheckPoint();
+        break;
       }
     break;
 
@@ -189,6 +192,7 @@ void WayFinder::GotoWaypoint(double wypt1x, double wypt1y, double startAngle, do
         WayFinder::DriveToTarget(dt, _DistanceInRotations, reverse);
       } else {
         WayFinder::EndCheckPoint();
+        break;
       }
     break;
 
