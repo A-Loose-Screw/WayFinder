@@ -108,8 +108,8 @@ void WayFinder::TestPID(double dt, double goal) {
   double RightSpeed = InternalPID(dt, goal, _drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations());
 
   // Drive straight using gyro
-  LeftSpeed -= (_drivetrain.GetConfig().gyro->GetAngle() * (_kP/2));
-  RightSpeed += (_drivetrain.GetConfig().gyro->GetAngle() * (_kP/2));
+  LeftSpeed -= (_drivetrain.GetConfig().gyro->GetAngle() * _kP);
+  RightSpeed += (_drivetrain.GetConfig().gyro->GetAngle() * _kP);
 
   // Limit Power to max speed
   LeftSpeed *= _MaxSpeed;
