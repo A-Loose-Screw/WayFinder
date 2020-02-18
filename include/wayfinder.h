@@ -37,18 +37,22 @@ class WayFinder {
 
 
     /**
-     * Get's the static distance of the goal in rotations
+     * Gets the static distance of the goal in rotations
      */
     double GetDistanceInRotations();
 
 
     /**
-     * Get's the average location between the left and riht encoders
+     * Gets the average location between the left and riht encoders
      * to grab the location of the drivetrain
      */
     double GetDrivetrainCurrentLocation();
 
 
+    /**
+     * Gets if the waypoint is complete, 
+     * Returns a true or false value
+     */ 
     bool GetWayPointComplete();
 
 
