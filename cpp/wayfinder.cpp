@@ -82,8 +82,8 @@ void WayFinder::DriveToTarget(double dt, double goal , bool reverse) {
 
   if (reverse) {
     // Drive straight using gyro
-    LeftSpeed += (_drivetrain.GetConfig().gyro->GetAngle() * (_kP/2));
-    RightSpeed -= (_drivetrain.GetConfig().gyro->GetAngle() * (_kP/2));
+    LeftSpeed += (_drivetrain.GetConfig().gyro->GetAngle() * (_kP));
+    RightSpeed -= (_drivetrain.GetConfig().gyro->GetAngle() * (_kP));
 
     // Inverse Power
     LeftSpeed = InverseNumber(LeftSpeed);
@@ -135,6 +135,13 @@ void WayFinder::StartWaypoint() {
   WayPointStart = false;
 }
 
+// Ends the turn, Zero's encoders and angles
+void WayFinder::EndTurn() {
+  WayFinder::EndCheckPoint();
+  _drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
+  _drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
+}
+
 void WayFinder::EndCase() {
   CaseNumber = 1;
   WayPointComplete = true;
@@ -167,32 +174,32 @@ void WayFinder::GotoWaypoint(double wypt1x, double wypt1y, double startAngle, do
           if (_drivetrain.GetConfig().gyro->GetAngle() > startAngle) {
             WayFinder::TurnToTarget(dt, _drivetrain.GetConfig().gyro->GetAngle(), startAngle, reverse);
           } else {
-            WayFinder::EndCheckPoint();
+            WayFinder::EndTurn();
           }
         } else if (startAngle > 0) {
           if (_drivetrain.GetConfig().gyro->GetAngle() < startAngle) {
             WayFinder::TurnToTarget(dt, _drivetrain.GetConfig().gyro->GetAngle(), startAngle, reverse);
           } else {
-            WayFinder::EndCheckPoint();
+            WayFinder::EndTurn();
             break;
           }
         } else {
-          WayFinder::EndCheckPoint();
+          WayFinder::EndTurn();
           break;
         }
       } else {
-        WayFinder::EndCheckPoint();
+        WayFinder::EndTurn();
         break;
       }
     break;
 
     case 2:
       // Drive to target
-      if (abs(_drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations()) < _DistanceInRotations || abs(_drivetrain.GetConfig().rightDrive.encoder->GetEncoderRotations()) < _DistanceInRotations) {
-        WayFinder::DriveToTarget(dt, _DistanceInRotations, reverse);
-      } else {
+      if (abs(_drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations()) >= _DistanceInRotations || abs(_drivetrain.GetConfig().rightDrive.encoder->GetEncoderRotations()) >= _DistanceInRotations) {
         WayFinder::EndCheckPoint();
         break;
+      } else {
+        WayFinder::DriveToTarget(dt, _DistanceInRotations, reverse);
       }
     break;
 

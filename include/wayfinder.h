@@ -6,7 +6,7 @@ class WayFinder {
   public:
 
     /**
-     * Way Finder. The crappy version of pathfinder. BUT WITH NO TRAJECTORIES. because, it's week 6.
+     * Way Finder. The crappy version of pathfinder. BUT WITH NO CURVE TRAJECTORIES. because, it's week 6.
      * and i'm not in the mood to build that. Initialize by inputing your PID values & drivetrain along 
      * with your gearbox reduction & wheel diameter. note gearbox reduction is from motor to output rotations on the wheel (12:1). 
      */
@@ -63,6 +63,7 @@ class WayFinder {
     double InternalPID(double dt, double goal, double input);
     double InverseNumber(double input);
     void EndCase();
+    void EndTurn();
     void EndCheckPoint();
     void StartWaypoint();
 
