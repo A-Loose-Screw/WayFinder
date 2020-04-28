@@ -21,7 +21,7 @@ class WayFinder {
     /**
      * Configure the speeds and values of your auto (Defult is 0.5 & 0.4)
      */
-    void AutoConfig(double MaxSpeed, double MaxTurnSpeed);
+    void Config(double MaxSpeed, double MaxTurnSpeed);
 
     /**
      * Using pathweaver or whatever you choose to calculate your waypoints, input the coords

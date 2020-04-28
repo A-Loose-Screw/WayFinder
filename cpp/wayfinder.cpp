@@ -24,7 +24,7 @@ double WayFinder::RotationsToTarget(double p1x, double p1y, double p2x, double p
 }
 
 // Config for speed
-void WayFinder::AutoConfig(double MaxSpeed, double MaxTurnSpeed) {
+void WayFinder::Config(double MaxSpeed, double MaxTurnSpeed) {
   _MaxSpeed = MaxSpeed;
   _MaxTurnSpeed = MaxTurnSpeed;
 }
