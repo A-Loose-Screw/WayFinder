@@ -119,7 +119,7 @@ void WayFinder::TestPID(double dt, double goal) {
   _drivetrain.Set(LeftSpeed, RightSpeed);
 }
 
-bool WayFinder::GetWayPointComplete() {
+bool WayFinder::GetWaypointComplete() {
   if (WayPointComplete) {
     WayPointComplete = false;
     return true;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Drivetrain.h"
+#include "Spline.h"
 
 class WayFinder {
   public:
@@ -65,7 +66,7 @@ class WayFinder {
      * Gets if the waypoint is complete, 
      * Returns a true or false value
      */ 
-    bool GetWayPointComplete();
+    bool GetWaypointComplete();
 
 
 
