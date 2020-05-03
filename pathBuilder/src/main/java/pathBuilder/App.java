@@ -22,9 +22,9 @@ public class App extends JFrame {
 		WayPoints _wayPoints = new WayPoints();
 		DrawPath d = new DrawPath(_wayPoints.wayPoints);
 		f.add(d);
-		f.addKeyListener(new M_KeyListener());
-		while(true) {
-			f.repaint();
-		}
+		f.addKeyListener(new M_KeyListener(_wayPoints, f));
+		// while(true) {
+		// 	f.repaint();
+		// }
 	}
 }
