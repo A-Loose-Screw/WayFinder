@@ -47,14 +47,20 @@ public class M_KeyListener implements KeyListener {
         break;
 
       case KeyEvent.VK_LEFT:
-        WayPoints.selectedPoint--;
+        if (WayPoints.selectedPoint > 0) {
+          WayPoints.selectedPoint--;
+        }
         _f.repaint();
         break;
 
       case KeyEvent.VK_RIGHT:
-        WayPoints.selectedPoint++;
+        if (WayPoints.selectedPoint < (_wp.wayPoints.size()-1)) {
+          WayPoints.selectedPoint++;
+        }
         _f.repaint();
         break;
     }
+    System.out.println("Selected Point: " + WayPoints.selectedPoint);
+    System.out.println("Size of waypoints: " + _wp.wayPoints.size());
 	}
 }
