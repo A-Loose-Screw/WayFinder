@@ -33,33 +33,61 @@ public class M_KeyListener implements KeyListener {
     p = _wp.wayPoints.get(WayPoints.selectedPoint);
     System.out.println("Key Pressed: " + e.getKeyChar());
     int keyCode = e.getKeyCode();
-    switch(keyCode) { 
-      case KeyEvent.VK_UP:
-        p.y -= 3;
-        _wp.wayPoints.set(WayPoints.selectedPoint, p);
-        _f.repaint();
-        break;
 
-      case KeyEvent.VK_DOWN:
-        p.y += 3;
-        _wp.wayPoints.set(WayPoints.selectedPoint, p);
-        _f.repaint();
-        break;
-
-      case KeyEvent.VK_LEFT:
-        if (WayPoints.selectedPoint > 0) {
-          WayPoints.selectedPoint--;
-        }
-        _f.repaint();
-        break;
-
-      case KeyEvent.VK_RIGHT:
-        if (WayPoints.selectedPoint < (_wp.wayPoints.size()-1)) {
-          WayPoints.selectedPoint++;
-        }
-        _f.repaint();
-        break;
+    // C key 
+    if (keyCode == KeyEvent.VK_C) {
+      if (DrawPath.isCircle) {
+        DrawPath.isCircle = false;
+      } else {
+        DrawPath.isCircle = true;
+      }
+      _f.repaint();
     }
+
+    // Left key
+    if (keyCode == KeyEvent.VK_LEFT) {
+      p.x -= 3;
+      _wp.wayPoints.set(WayPoints.selectedPoint, p);
+      _f.repaint();
+    }
+
+    // Right key
+    if (keyCode == KeyEvent.VK_RIGHT) {
+      p.x += 3;
+      _wp.wayPoints.set(WayPoints.selectedPoint, p);
+      _f.repaint();
+    }
+
+    // Up key
+    if (keyCode == KeyEvent.VK_UP) {
+      p.y -= 3;
+      _wp.wayPoints.set(WayPoints.selectedPoint, p);
+      _f.repaint();
+    }
+
+    // Down key
+    if (keyCode == KeyEvent.VK_DOWN) {
+      p.y += 3;
+      _wp.wayPoints.set(WayPoints.selectedPoint, p);
+      _f.repaint();
+    }
+
+    // Z key
+    if (keyCode == KeyEvent.VK_Z) {
+      if (WayPoints.selectedPoint > 0) {
+        WayPoints.selectedPoint--;
+      }
+      _f.repaint();
+    }
+
+    // X key
+    if (keyCode == KeyEvent.VK_X) {
+      if (WayPoints.selectedPoint < (_wp.wayPoints.size()-1)) {
+        WayPoints.selectedPoint++;
+      }
+      _f.repaint();
+    }
+
     System.out.println("Selected Point: " + WayPoints.selectedPoint);
     System.out.println("Size of waypoints: " + _wp.wayPoints.size());
 	}

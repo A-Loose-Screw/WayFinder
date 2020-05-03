@@ -8,12 +8,23 @@ import java.awt.event.KeyEvent;
 import javax.swing.*;
 
 public class SplineCalculate {
-  public static Point getSplinePoint(float t, Vector<Point> points) {
+  public static Point getSplinePoint(float t, Vector<Point> points, boolean isLooped) {
     int p0, p1, p2, p3;
-    p1 = (int)t+1;
-    p2 = p1 + 1;
-    p3 = p2 + 1;
-    p0 = p1 - 1;
+    if (!isLooped) {
+      p1 = (int)t+1;
+      p2 = p1 + 1;
+      p3 = p2 + 1;
+      p0 = p1 - 1;
+    } else {
+      p1 = (int)t;
+      p2 = (p1 + 1) % points.size();
+      p3 = (p2 + 1) % points.size();
+      if (p1 >= 1) {
+        p0 = p1 - 1;
+      } else {
+        p0 = points.size() - 1;
+      }
+    }
 
     t = t - (int)t;
 

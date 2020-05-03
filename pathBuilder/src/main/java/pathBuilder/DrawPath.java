@@ -10,6 +10,7 @@ import javax.swing.*;
 
 public class DrawPath extends JComponent {
   Vector<Point> drawablePoints = new Vector<Point>();
+  public static boolean isCircle = true;
 
   DrawPath(Vector points) {
     drawablePoints = points;
@@ -30,10 +31,18 @@ public class DrawPath extends JComponent {
       }
     }
 
-    for (float t = 0.0f; t < (float)drawablePoints.size() - 3.0f; t+=0.005f) {
-      g.setColor(Color.BLACK);
-      Point splinePoints = SplineCalculate.getSplinePoint(t, drawablePoints);
-      g.fillOval(splinePoints.x, splinePoints.y, 2, 2);
+    if (isCircle) {
+      for (float t = 0.0f; t < (float)drawablePoints.size(); t+=0.005f) {
+        g.setColor(Color.BLACK);
+        Point splinePoints = SplineCalculate.getSplinePoint(t, drawablePoints, isCircle);
+        g.fillOval(splinePoints.x, splinePoints.y, 2, 2);
+      }
+    } else {
+      for (float t = 0.0f; t < (float)drawablePoints.size() - 3.0f; t+=0.005f) {
+        g.setColor(Color.BLACK);
+        Point splinePoints = SplineCalculate.getSplinePoint(t, drawablePoints, isCircle);
+        g.fillOval(splinePoints.x, splinePoints.y, 2, 2);
+      }
     }
 	}
 }
