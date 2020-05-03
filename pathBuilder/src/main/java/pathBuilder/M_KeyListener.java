@@ -35,13 +35,13 @@ public class M_KeyListener implements KeyListener {
     int keyCode = e.getKeyCode();
     switch(keyCode) { 
       case KeyEvent.VK_UP:
-        p.y--;
+        p.y -= 3;
         _wp.wayPoints.set(WayPoints.selectedPoint, p);
         _f.repaint();
         break;
 
       case KeyEvent.VK_DOWN:
-        p.y++;
+        p.y += 3;
         _wp.wayPoints.set(WayPoints.selectedPoint, p);
         _f.repaint();
         break;

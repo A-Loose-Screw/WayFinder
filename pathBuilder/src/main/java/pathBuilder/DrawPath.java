@@ -30,10 +30,10 @@ public class DrawPath extends JComponent {
       }
     }
 
-    for (float t = 0.0f; t < 1.0f; t+=0.05f) {
+    for (float t = 0.0f; t < (float)drawablePoints.size() - 3.0f; t+=0.005f) {
       g.setColor(Color.BLACK);
       Point splinePoints = SplineCalculate.getSplinePoint(t, drawablePoints);
-      g.fillOval(splinePoints.x, splinePoints.y, 10, 10);
+      g.fillOval(splinePoints.x, splinePoints.y, 2, 2);
     }
 	}
 }
