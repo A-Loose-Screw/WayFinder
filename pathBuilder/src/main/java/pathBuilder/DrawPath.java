@@ -10,6 +10,8 @@ import javax.swing.*;
 
 public class DrawPath extends JComponent {
   Vector<Point> drawablePoints = new Vector<Point>();
+  Point markerPoint = new Point(0,0);
+  Point markerGradient = new Point(0,0); // The Marker is assumed robot's orientation at any given Point.
   public static boolean isCircle = true;
 
   DrawPath(Vector points) {
@@ -44,5 +46,21 @@ public class DrawPath extends JComponent {
         g.fillOval(splinePoints.x, splinePoints.y, 2, 2);
       }
     }
+
+    g.setColor(Color.GREEN);
+    markerPoint = SplineCalculate.getSplinePoint(WayPoints.fMarker, drawablePoints, isCircle);
+    markerGradient = SplineCalculate.getSplineGradient(WayPoints.fMarker, drawablePoints, isCircle);
+    double r = Math.atan2(-markerGradient.y, markerGradient.x);
+    
+    double mkrP1x = 15.0f * Math.sin(r) + markerPoint.x;
+    double mkrP1y = 15.0f * Math.cos(r) + markerPoint.y;
+    double mkrP2x = -15.0f * Math.sin(r) + markerPoint.x;
+    double mkrP2y = -15.0f * Math.cos(r) + markerPoint.y;
+
+    // thicker line 
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setStroke(new BasicStroke(3));
+
+    g2.drawLine((int)mkrP1x, (int)mkrP1y, (int)mkrP2x, (int)mkrP2y);		
 	}
 }
