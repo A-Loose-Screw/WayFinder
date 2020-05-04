@@ -12,7 +12,7 @@ public class DrawPath extends JComponent {
   Vector<Point> drawablePoints = new Vector<Point>();
   Point markerPoint = new Point(0,0);
   Point markerGradient = new Point(0,0); // The Marker is assumed robot's orientation at any given Point.
-  public static boolean isCircle = true;
+  public static boolean isCircle = false;
 
   DrawPath(Vector points) {
     drawablePoints = points;

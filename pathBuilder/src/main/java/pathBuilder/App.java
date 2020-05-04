@@ -10,10 +10,12 @@ import javax.swing.*;
 
 public class App extends JFrame {
 	static JFrame f = new JFrame();
+	public static int WIDTH = 900;
+	public static int HEIGHT = 600;
 
 	public static void createWindow() {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(900,600);
+		f.setSize(WIDTH,HEIGHT);
 		f.setVisible(true);
 	}
 	

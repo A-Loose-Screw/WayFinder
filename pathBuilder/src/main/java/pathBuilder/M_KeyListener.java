@@ -98,13 +98,28 @@ public class M_KeyListener implements KeyListener {
 
     // S key
     if (keyCode == KeyEvent.VK_S) {
-      if (WayPoints.fMarker < (_wp.wayPoints.size()-1)) {
+      if (WayPoints.fMarker < (_wp.wayPoints.size()-3)) {
         WayPoints.fMarker += 0.01;
       }
       _f.repaint();
     }
 
+    // V key
+    if (keyCode == KeyEvent.VK_V) {
+      _wp.addWayPoint();
+      _f.repaint();
+    }
+
+    // f key
+    if (keyCode == KeyEvent.VK_F) {
+      if (_wp.wayPoints.size() > 4) {
+      _wp.removeWayPoint();
+      _f.repaint();
+      }
+    }
+
     System.out.println("Selected Point: " + WayPoints.selectedPoint);
     System.out.println("Size of waypoints: " + _wp.wayPoints.size());
+    System.out.println("fMarker: " + WayPoints.fMarker);
 	}
 }
