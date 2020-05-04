@@ -22,7 +22,7 @@ public class App extends JFrame {
 	public static void main(String[] args) {
 		createWindow();
 		WayPoints _wayPoints = new WayPoints();
-		DrawPath d = new DrawPath(_wayPoints.wayPoints);
+		DrawPath d = new DrawPath(_wayPoints);
 		f.add(d);
 		f.addKeyListener(new M_KeyListener(_wayPoints, f));
 		// while(true) {

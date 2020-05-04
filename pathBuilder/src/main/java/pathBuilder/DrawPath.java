@@ -9,13 +9,13 @@ import java.awt.event.KeyEvent;
 import javax.swing.*;
 
 public class DrawPath extends JComponent {
-  Vector<Point> drawablePoints = new Vector<Point>();
   Point markerPoint = new Point(0,0);
   Point markerGradient = new Point(0,0); // The Marker is assumed robot's orientation at any given Point.
-  public static boolean isCircle = false;
+  public static boolean isCircle = true;
+  WayPoints _wp;
 
-  DrawPath(Vector points) {
-    drawablePoints = points;
+  DrawPath(WayPoints wp) {
+    _wp = wp;
   }
 
   
@@ -23,34 +23,51 @@ public class DrawPath extends JComponent {
 		super.paintComponent(g);
     this.setBackground(Color.WHITE);
 
-    for (int i = 0; i < drawablePoints.size(); i++) {
-      if (i == WayPoints.selectedPoint) {
+    double totalSplineLength = 0.0;
+
+    // draw control points
+    for (int i = 0; i < _wp.wayPoints.size(); i++) {
+      double length = 0;
+      if (isCircle) {
+        length = SplineCalculate.calcSegLength(i, _wp.wayPoints, isCircle);
+        totalSplineLength += length;
+      }
+      if (i == _wp.selectedPoint) {
         g.setColor(Color.RED);
-        g.fillOval(drawablePoints.get(i).x, drawablePoints.get(i).y, 10, 10);
+        if (isCircle) {
+          g.drawString("Seg Length: " + length, 10, 50*(i+1));
+        }
+        g.fillOval(_wp.wayPoints.get(i).x, _wp.wayPoints.get(i).y, 10, 10);
       } else {
         g.setColor(Color.BLUE);
-        g.fillOval(drawablePoints.get(i).x, drawablePoints.get(i).y, 10, 10);
+        if (isCircle) {
+          g.drawString("Seg Length: " + length, 10, 50*(i+1));
+        }
+        g.fillOval(_wp.wayPoints.get(i).x, _wp.wayPoints.get(i).y, 10, 10);
       }
     }
 
+    // Draw in between spline points
     if (isCircle) {
-      for (float t = 0.0f; t < (float)drawablePoints.size(); t+=0.005f) {
+      for (double t = 0.0f; t < (double)_wp.wayPoints.size(); t+=0.005f) {
         g.setColor(Color.BLACK);
-        Point splinePoints = SplineCalculate.getSplinePoint(t, drawablePoints, isCircle);
+        Point splinePoints = SplineCalculate.getSplinePoint(t, _wp.wayPoints, isCircle);
         g.fillOval(splinePoints.x, splinePoints.y, 2, 2);
       }
     } else {
-      for (float t = 0.0f; t < (float)drawablePoints.size() - 3.0f; t+=0.005f) {
+      for (double t = 0.0f; t < (double)_wp.wayPoints.size() - 3.0f; t+=0.005f) {
         g.setColor(Color.BLACK);
-        Point splinePoints = SplineCalculate.getSplinePoint(t, drawablePoints, isCircle);
+        Point splinePoints = SplineCalculate.getSplinePoint(t, _wp.wayPoints, isCircle);
         g.fillOval(splinePoints.x, splinePoints.y, 2, 2);
       }
     }
 
+    // Draw virtual robot
     g.setColor(Color.GREEN);
-    markerPoint = SplineCalculate.getSplinePoint(WayPoints.fMarker, drawablePoints, isCircle);
-    markerGradient = SplineCalculate.getSplineGradient(WayPoints.fMarker, drawablePoints, isCircle);
+    markerPoint = SplineCalculate.getSplinePoint(_wp.fMarker, _wp.wayPoints, isCircle);
+    markerGradient = SplineCalculate.getSplineGradient(_wp.fMarker, _wp.wayPoints, isCircle);
     double r = Math.atan2(-markerGradient.y, markerGradient.x);
+    double dgr = -(Math.toDegrees(r));
     
     double mkrP1x = 15.0f * Math.sin(r) + markerPoint.x;
     double mkrP1y = 15.0f * Math.cos(r) + markerPoint.y;
@@ -62,5 +79,10 @@ public class DrawPath extends JComponent {
     g2.setStroke(new BasicStroke(3));
 
     g2.drawLine((int)mkrP1x, (int)mkrP1y, (int)mkrP2x, (int)mkrP2y);		
+    g.setColor(Color.BLACK);
+    g.drawString("Total Path Length: " + totalSplineLength, 10, (50*_wp.wayPoints.size())+50);
+    g.drawString("Robot Location in Path: (" + markerPoint.x + "," + markerPoint.y + ")", 10, (50*_wp.wayPoints.size()) + 100);
+    g.drawString("Robot rotation (Radians): " + r, 10, (50*_wp.wayPoints.size())+150);
+    g.drawString("Robot rotation (Degrees): " + dgr, 10, (50*_wp.wayPoints.size())+170);
 	}
 }

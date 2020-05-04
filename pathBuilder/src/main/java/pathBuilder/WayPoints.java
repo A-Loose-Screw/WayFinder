@@ -5,9 +5,9 @@ import java.util.*;
 
 
 public class WayPoints {
-  static int numOfWayPoints = 4;
-  static int selectedPoint = 0;
-  static float fMarker = 0.0f; // Esentially the robot following the path
+  int numOfWayPoints = 4;
+  int selectedPoint = 0;
+  double fMarker = 0.0; // Esentially the robot following the path
   Vector<Point> wayPoints = new Vector<Point>();
   // Point p1 = new Point(100, 300);
   // Point p2 = new Point(200, 300);

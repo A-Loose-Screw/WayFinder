@@ -30,7 +30,7 @@ public class M_KeyListener implements KeyListener {
 
 	@Override
   public void keyPressed(KeyEvent e) {
-    p = _wp.wayPoints.get(WayPoints.selectedPoint);
+    p = _wp.wayPoints.get(_wp.selectedPoint);
     System.out.println("Key Pressed: " + e.getKeyChar());
     int keyCode = e.getKeyCode();
 
@@ -47,59 +47,59 @@ public class M_KeyListener implements KeyListener {
     // Left key
     if (keyCode == KeyEvent.VK_LEFT) {
       p.x -= 3;
-      _wp.wayPoints.set(WayPoints.selectedPoint, p);
+      _wp.wayPoints.set(_wp.selectedPoint, p);
       _f.repaint();
     }
 
     // Right key
     if (keyCode == KeyEvent.VK_RIGHT) {
       p.x += 3;
-      _wp.wayPoints.set(WayPoints.selectedPoint, p);
+      _wp.wayPoints.set(_wp.selectedPoint, p);
       _f.repaint();
     }
 
     // Up key
     if (keyCode == KeyEvent.VK_UP) {
       p.y -= 3;
-      _wp.wayPoints.set(WayPoints.selectedPoint, p);
+      _wp.wayPoints.set(_wp.selectedPoint, p);
       _f.repaint();
     }
 
     // Down key
     if (keyCode == KeyEvent.VK_DOWN) {
       p.y += 3;
-      _wp.wayPoints.set(WayPoints.selectedPoint, p);
+      _wp.wayPoints.set(_wp.selectedPoint, p);
       _f.repaint();
     }
 
     // Z key
     if (keyCode == KeyEvent.VK_Z) {
-      if (WayPoints.selectedPoint > 0) {
-        WayPoints.selectedPoint--;
+      if (_wp.selectedPoint > 0) {
+        _wp.selectedPoint--;
       }
       _f.repaint();
     }
 
     // X key
     if (keyCode == KeyEvent.VK_X) {
-      if (WayPoints.selectedPoint < (_wp.wayPoints.size()-1)) {
-        WayPoints.selectedPoint++;
+      if (_wp.selectedPoint < (_wp.wayPoints.size()-1)) {
+        _wp.selectedPoint++;
       }
       _f.repaint();
     }
 
     // A key
     if (keyCode == KeyEvent.VK_A) {
-      if (WayPoints.fMarker > 0) {
-        WayPoints.fMarker -= 0.01;
+      if (_wp.fMarker > 0) {
+        _wp.fMarker -= 0.01;
       }
       _f.repaint();
     }
 
     // S key
     if (keyCode == KeyEvent.VK_S) {
-      if (WayPoints.fMarker < (_wp.wayPoints.size()-3)) {
-        WayPoints.fMarker += 0.01;
+      if (_wp.fMarker < (_wp.wayPoints.size()-3)) {
+        _wp.fMarker += 0.01;
       }
       _f.repaint();
     }
@@ -118,8 +118,8 @@ public class M_KeyListener implements KeyListener {
       }
     }
 
-    System.out.println("Selected Point: " + WayPoints.selectedPoint);
+    System.out.println("Selected Point: " + _wp.selectedPoint);
     System.out.println("Size of waypoints: " + _wp.wayPoints.size());
-    System.out.println("fMarker: " + WayPoints.fMarker);
+    System.out.println("fMarker: " + _wp.fMarker);
 	}
 }
