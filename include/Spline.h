@@ -1,19 +1,23 @@
 #pragma once
+#include <iostream>
+#include <cmath>
 #include <vector>
 
-namespace WayFinderSpline {
+namespace WayFinder {
   struct sPoint {
-    float x;
-    float y;
-  };
-
-  struct sSpline {
-    std::vector<sPoint> points;
-    sPoint GetSplinePoint(float t);
+    double x, y, length = 0;
   };
 
   class Spline {
-   public:
-    void PathCreator(sSpline spline);
+    Spline();
+    ~Spline() {
+      printf("Spline Object Deconstructed");
+    }
+   private:
+    sPoint getSplinePoint(double t, std::vector<sPoint>points);
+    sPoint getSplineGradient(double t, std::vector<sPoint>points);
+    double calcSegLength(int node, std::vector<sPoint>points);
+    // Influencers
+    int p0, p1, p2, p3;
   };
 }
