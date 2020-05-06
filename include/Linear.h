@@ -10,10 +10,7 @@ namespace WayFinder {
 
   class Linear {
    public:
-    Linear();
-    ~Linear() {
-      printf("Linear Object Decontructed");
-    }
+    
    private:
 
   };

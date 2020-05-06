@@ -7,18 +7,19 @@
 namespace WayFinder {
   class Path : public Spline, public Linear {
    public:
-    Path();
-    ~Path() {
-      printf("Path Object Deconstructed");
-    }
+    // Path type define
+    struct lPath {
+      std::vector<lPoint> points;
+    };
+    struct sPath {
+      std::vector<sPoint> points;
+    };
 
-    // Path types
-    std::vector<sPoint> sPath;
-    std::vector<lPoint> lPath;
-
-    void followPath(std::vector<lPoint> path, bool reversed);
-    void followPath(std::vector<sPoint> path, bool reversed);
+    void followLinearPath(lPath path, bool reversed);
+    void followSplinePath(sPath path, bool reversed);
 
    private:
+    Spline _spline;
+    Linear _linear;
   };
 }

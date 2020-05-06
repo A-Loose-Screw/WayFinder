@@ -33,7 +33,7 @@ WayFinder::sPoint WayFinder::Spline::getSplineGradient(double t, std::vector<sPo
 
   // sqrd/cubed t
   double tt = t * t;
-  // double ttt = tt * t;
+  // double ttt = tt * t; // not needed for gradient
 
   double q1 = -3.0 * tt + 4.0*t - 1;
   double q2 = 9.0*tt - 10.0*t;

@@ -10,10 +10,7 @@ namespace WayFinder {
 
   class Spline {
    public:
-    Spline();
-    ~Spline() {
-      printf("Spline Object Deconstructed");
-    }
+    // @TODO
    private:
     sPoint getSplinePoint(double t, std::vector<sPoint>points);
     sPoint getSplineGradient(double t, std::vector<sPoint>points);
