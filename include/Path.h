@@ -1,20 +1,24 @@
 #pragma once
-#include <iostream>
-#include <math>
-#include <vector>
 
 // path types
 #include "Spline.h"
-// #include ""
+#include "Linear.h"
 
 namespace WayFinder {
-  class Path : public Spline {
+  class Path : public Spline, public Linear {
+   public:
     Path();
     ~Path() {
       printf("Path Object Deconstructed");
     }
 
-    public:
+    // Path types
+    std::vector<sPoint> sPath;
+    std::vector<lPoint> lPath;
 
-  }
+    void followPath(std::vector<lPoint> path, bool reversed);
+    void followPath(std::vector<sPoint> path, bool reversed);
+
+   private:
+  };
 }

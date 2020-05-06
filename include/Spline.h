@@ -9,6 +9,7 @@ namespace WayFinder {
   };
 
   class Spline {
+   public:
     Spline();
     ~Spline() {
       printf("Spline Object Deconstructed");
