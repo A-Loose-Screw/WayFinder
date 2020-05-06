@@ -19,7 +19,7 @@ public class WayPoints {
 
   WayPoints() {
     for (int i = 0; i < numOfWayPoints; i++) {
-      int x = (App.WIDTH/4) + i*50;
+      int x = (App.WIDTH/4) + i*100;
       int y = App.HEIGHT/2;
       wayPoints.add(new Point(x, y));
     }
