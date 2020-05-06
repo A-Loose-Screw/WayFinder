@@ -5,13 +5,12 @@
 
 namespace WayFinder {
   struct lPoint {
-    double x, y, length = 0;
+    double x, y, rotation = 0, length = 0;
   };
 
   class Linear {
    public:
     
    private:
-
   };
 }

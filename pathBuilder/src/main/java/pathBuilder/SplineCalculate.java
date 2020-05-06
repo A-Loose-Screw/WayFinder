@@ -71,7 +71,6 @@ public class SplineCalculate {
     double tt = t * t;
     double ttt = tt * t;
 
-    // Influencers
     double q1 = -ttt + 2.0f*tt - t;
     double q2 = 3.0f*ttt - 5.0f*tt + 2.0f;
     double q3 = -3.0f*ttt + 4.0f*tt + t;

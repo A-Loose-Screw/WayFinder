@@ -17,7 +17,7 @@ namespace WayFinder {
       _wheelDiameter = wheelDiameter;
     }
    #else
-    WayFinder(double gearboxReduction, double wheelDiameter) {
+    WayFinder(double &leftEncoder, double &rightEncoder, double gearboxReduction, double wheelDiameter) : _leftEncoder(leftEncoder), _rightEncoder(rightEncoder) {
       _gearboxReduction = gearboxReduction;
       _wheelDiameter = wheelDiameter;
     }
@@ -31,30 +31,25 @@ namespace WayFinder {
      */
     void autoConfig(double kp, double ki, double kd, double gearboxReduction, double wheelDiameter, double maxSpeed, double maxTurnSpeed);
 
-    /** 
-     * Set the spline influencers to get a more subtle or extreme curve between waypoints (will effect whole path)
+    /**
+     * follow path automatically (WML only)
      */
-    void setSplineInfluencers(double q1 = 0, double q2 = 0, double q3 = 0, double q4 = 0);
+    void followPath(lPath path, bool reversed);
 
     /**
      * follow path automatically (WML only)
      */
-    void followPath(Path::lPath path, bool reversed);
-
-    /**
-     * follow path automatically (WML only)
-     */
-    void followPath(Path::sPath path, bool reversed);
+    void followPath(sPath path, bool reversed);
 
     /**
      * follow a group of paths automatically (WML only)
      */
-    void followPathGroup(std::vector<Path::lPath> paths, bool reversed);
+    void followPathGroup(std::vector<lPath> paths, bool reversed);
     
     /**
      * follow group of paths automatically (WML only)
      */
-    void followPathGroup(std::vector<Path::sPath> paths, bool reversed);
+    void followPathGroup(std::vector<sPath> paths, bool reversed);
 
     /**
      * Get Values for drivetrain if your not using wml,
@@ -70,9 +65,13 @@ namespace WayFinder {
      */
     double getDrivetrainAngle(bool radians = false);
 
+    /**
+     * Returns true if complete following a path
+     */
+    bool followComplete();
+
 
    private:
-
     // PID Values
     double *_kp;
     double *_kd;
@@ -80,7 +79,11 @@ namespace WayFinder {
 
     #ifdef USING_WML
       wml::Drivetrain &_drivetrain;
+    #else 
+      double &_leftEncoder;
+      double &_rightEncoder;
     #endif
+
     double _gearboxReduction;
     double _wheelDiameter;
 

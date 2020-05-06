@@ -12,3 +12,10 @@ void WayFinder::WayFinder::autoConfig(double kp, double ki, double kd, double ge
   _maxTurnSpeed = maxTurnSpeed;
 }
 
+void WayFinder::WayFinder::followPath(lPath path, bool reversed) {
+  followLinearPath(path, reversed);
+} 
+
+void WayFinder::WayFinder::followPath(sPath path, bool reversed) {
+  followSplinePath(path, reversed);
+}

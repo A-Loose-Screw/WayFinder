@@ -14,7 +14,7 @@ namespace WayFinder {
     struct sPath {
       std::vector<sPoint> points;
     };
-
+   protected:
     void followLinearPath(lPath path, bool reversed);
     void followSplinePath(sPath path, bool reversed);
 
