@@ -24,7 +24,7 @@ namespace wayfinder {
 		return{ tx, ty };
 	}
 
-	Path::sPoint Path::getSplineGradient(double t, sSpline spline) {
+	Path::sPoint Path::getSplineGradientPoints(double t, sSpline spline) {
 		int p0, p1, p2, p3;
 		p1 = (int)t + 1;
 		p2 = p1 + 1;
@@ -45,5 +45,36 @@ namespace wayfinder {
 		double ty = 0.5f * (spline.points[p0].y * q1 + spline.points[p1].y * q2 + spline.points[p2].y * q3 + spline.points[p3].y * q4);
 
 		return{ tx, ty };
+	}
+
+	double Path::getSplineAngle_Rad(double t, sSpline spline) {
+		sPoint gradient = getSplineGradientPoints(t, spline);
+		return atan2(gradient.y, gradient.x);
+	}
+
+	double Path::getSplineAngle_Deg(double t, sSpline spline) {
+		return (getSplineAngle_Rad(t, spline) * (180/M_PI));
+	}
+
+	// Calculate seg length needs to happen once. (in loop. will slow robot down)
+	// Calculation is approximation (There is no answer to life... except 42)
+	double Path::calculateSegLength(int node, sSpline spline) {
+		double length = 0.0f;
+		double stepSize = 0.005f;
+
+		sPoint old_point, new_point;
+		old_point = getSplinePoint((double)node, spline);
+
+		for (double t = 0; t < 1.0f; t += stepSize) {
+			new_point = getSplinePoint((double)node + t, spline);
+
+			// Calc length (pythag)
+			double bufferLength = (new_point.x - old_point.x)*(new_point.x - old_point.x) + (new_point.y - old_point.y)*(new_point.y - old_point.y);
+			length += sqrt(bufferLength);
+
+			old_point = new_point;
+		}
+
+		return length;
 	}
 }

@@ -3,19 +3,26 @@
 namespace wayfinder {
 	class WayFinder : protected RobotControl {
 	public:
-		WayFinder(Config &config);
+		WayFinder(Config *config);
 		~WayFinder();
 
 		/**
-		 * Uses drivetrain & config along with given spline to drive to target
+		 * Build path (calculates spline and length of spline)
+		 * Does this with multiple algorithms and loops
 		 */
-		void followPath(sSpline spline, bool reverse = false);
+		sPath buildPath(sSpline spline);
+
+		/**
+		 * Uses drivetrain, deltatime, config and built path to drive to target
+		 * Returns true once path complete
+		 */
+		bool followPath(sPath path, double dt, bool reverse = false);
 
 		/**
 		 * Returns true if robot is at waypoint number
 		 */
-		bool atWayPoint(int wayPointIndex);
+		bool atWayPoint(int node);
 	private:
-		Config &_config;
+		Config *_config;
 	};
-};
+}
