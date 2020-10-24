@@ -14,15 +14,27 @@ namespace wayfinder {
 			maxSpeed = 0,
 			maxTurnSpeed = 0;
 		};
+
+	/**
+	 * Lowers the bar of when the path should be completed. 
+	 * E.g path length is 30 rotations, & bar set to 0.5
+	 * the path will return complete when the robot reaches 29.5 rotations and over
+	 * Set higher for robots which tend to have more encoder drift
+	 */
+	void setBarStop(double bar) {_bar = bar;}
+
 	protected:
 		bool driveToTarget(sPath path, bool reverse, double dt, Config *config);
+		bool getWayPoint(int node, sPath path, Config *config);
 	private:
 
 		// Functions
 		double rotationsToTarget(sPath path, Config *config); // returns length of target in rotations
 		double internalPID(double dt, double goal, double input, Config *config); // PID for drivebase
-		double currentLocation(Config *config); // Gets location average between encoders in meters or working encoder value in meters
+		double currentLocation_M(Config *config); // Gets location average between encoders in meters or working encoder value in meters
+		double currentLocation_R(Config *config); // Gets location average between encoders in rotations or working encoder value in rotations
 		double gyroFollow(sPath path, double dt, Config *config); // follow gyro (returns power for drivebase)
+
 
 		// PID/PathComplete Vals
 		double _goal = 0;
@@ -31,9 +43,7 @@ namespace wayfinder {
 		bool _pathComplete = false;
 
 		// Target Values (static)
-		double _rotaionsToTarget = 0; // Rotation of wheel to target
-		
-		// Target Values (dynamic)
-		double _currentLocationInMeters = 0;
+		double _rotationsToTarget = 0; // Rotation of wheel to target
+		double _bar = 0;
 	};
 }

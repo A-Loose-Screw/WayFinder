@@ -9,11 +9,12 @@ namespace wayfinder {
 
 			// Positive length from waypoint. (Calculated by wayfinder. Manual input may affect robot)
 			double segLength = 0;
+			double totalLength = 0; // Length from start to this waypoint
 		};
 
 		struct sSpline {
 			std::vector<sPoint> points;
-			// sPoint CtrlPt1 = points.front(), CtrlPt2 = points.back();
+			sPoint CtrlPt1 = points.front(), CtrlPt2 = points.back();
 		};
 
 		struct sPath {

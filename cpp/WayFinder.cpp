@@ -5,11 +5,17 @@ namespace wayfinder {
 		_config = config;
 	}
 
-	// Approixmate length of spline
+	// Approixmate length of spline & nodes
 	Path::sPath WayFinder::buildPath(sSpline spline) {
 		double totalPathLength = 0.0f;
+
+		// Add the control points to the start and end of spline
+		spline.points.insert(spline.points.begin(), spline.CtrlPt1);
+		spline.points.push_back(spline.CtrlPt2);
+
 		for (size_t i = 0; i < spline.points.size(); i++) {
 			totalPathLength += (spline.points[i].segLength = calculateSegLength(i, spline));
+			spline.points[i].totalLength = totalPathLength;
 		}
 
 		sPath path{spline, totalPathLength};
@@ -20,7 +26,7 @@ namespace wayfinder {
 		return driveToTarget(path, reverse, dt, _config);
 	}
 
-	bool WayFinder::atWayPoint(int node) {
-		return false;
+	bool WayFinder::atWayPoint(int node, sPath path) {
+		return getWayPoint(node, path, _config);
 	}
 }

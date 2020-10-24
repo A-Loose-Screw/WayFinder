@@ -21,7 +21,7 @@ namespace wayfinder {
 		/**
 		 * Returns true if robot is at waypoint number
 		 */
-		bool atWayPoint(int node);
+		bool atWayPoint(int node, sPath path);
 	private:
 		Config *_config;
 	};
