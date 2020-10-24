@@ -12,7 +12,7 @@ namespace wayfinder {
 
 		_sum = _sum + error * dt;
 
-		double output = config->ki * error + config->ki * _sum + config->kd * derror;
+		double output = config->kp * error + config->ki * _sum + config->kd * derror;
 		
 		// Just in case the PID is a bit wack. (make sure value is between -1 and 1)
 		output = output < -1 ? -1 : output; // Smaller than 1
@@ -38,16 +38,11 @@ namespace wayfinder {
 		}
 	}
 
-	double RobotControl::gyroFollow(sPath path, Config *config) {
+	double RobotControl::gyroFollow(sPath path, double dt, Config *config) {
 		double gyroGoal = getSplineAngle_Deg(currentLocation(config), path.spline);
-		double gyroError = gyroGoal - config->drivetrain->GetConfig().gyro->GetAngle();
-
-		// Convert gyro error from 0/360 to -1/1 (motors)
-		gyroError = gyroError * config->kp;
-		gyroError = gyroError < -1 ? -1 : gyroError; // Smaller than 1
-		gyroError = gyroError > 1 ? 1 : gyroError; // Bigger than 1
-
-		return gyroError;
+		double output = internalPID(dt, gyroGoal, config->drivetrain->GetConfig().gyro->GetAngle(), config);
+		output *= config->maxTurnSpeed; // Limit turn speed. (Just in case it's a bit too jittery)
+		return output;
 	}
 
 	bool RobotControl::driveToTarget(sPath path, bool reverse, double dt, Config *config) {
@@ -56,8 +51,8 @@ namespace wayfinder {
 		double rightSpeed = internalPID(dt, _rotaionsToTarget, config->drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations(), config);
 
 		// gyro follow
-		leftSpeed -= gyroFollow(path, config);
-		rightSpeed += gyroFollow(path, config); 
+		leftSpeed += gyroFollow(path, dt, config);
+		rightSpeed -= gyroFollow(path, dt, config); 
 
 		// Limit power based on max speed (-1 to 1)
 		leftSpeed *= config->maxSpeed;

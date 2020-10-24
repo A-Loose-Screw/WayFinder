@@ -22,7 +22,7 @@ namespace wayfinder {
 		double rotationsToTarget(sPath path, Config *config); // returns length of target in rotations
 		double internalPID(double dt, double goal, double input, Config *config); // PID for drivebase
 		double currentLocation(Config *config); // Gets location average between encoders in meters or working encoder value in meters
-		double gyroFollow(sPath path, Config *config); // follow gyro (returns power for drivebase)
+		double gyroFollow(sPath path, double dt, Config *config); // follow gyro (returns power for drivebase)
 
 		// PID/PathComplete Vals
 		double _goal = 0;
