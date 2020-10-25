@@ -35,8 +35,26 @@ Robot.cpp
 using namespace frc;
 using namespace wml;
 
-Drivetrain *drivetrain; // Create your drivetrain instance (needs to be the same object you use for manual driving and auto driving)
+/**
+ * Setup your drivetrain (example below)
+ */
+SparkMax FL{ 12, SparkMax::MotorType::kNEO, 42 };
+SparkMax BL{ 13, SparkMax::MotorType::kNEO, 42 };
+SparkMax FR{ 10, SparkMax::MotorType::kNEO, 42 };
+SparkMax BR{ 11, SparkMax::MotorType::kNEO, 42 };
 
+actuators::MotorVoltageController leftMotors = actuators::MotorVoltageController::Group(FL, BL);
+actuators::MotorVoltageController rightMotors = actuators::MotorVoltageController::Group(FR, BR);
+
+Gearbox leftGearbox{ &leftMotors, &FL, 8.45 };
+Gearbox rightGearbox{ &rightMotors, &FR, 8.45 };
+
+DrivetrainConfig drivetrainConfig{ leftGearbox, rightGearbox };
+Drivetrain drivetrain{ drivetrainConfig }; // Create your drivetrain instance
+
+/**
+ * Setup wayfinder
+ */
 wayfinder::WayFinder *wayFinder; // Create your wayfinder instance
 
 
@@ -44,7 +62,7 @@ wayfinder::WayFinder *wayFinder; // Create your wayfinder instance
  * Configure your wayfinder options to be used during auto
  */
 wayfinder::RobotControl::Config wfdConfig{
-	drivetrain, // Pass in your drivetrain (requires a pointer)
+	&drivetrain, // Pass in your drivetrain (requires a pointer)
 
 	true, // Invert your left encoder
 	false, // Invert your right encoder
