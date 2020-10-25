@@ -25,8 +25,12 @@ namespace wayfinder {
 	}
 
 	double RobotControl::currentLocation_R(Config *config) {
-		double currentRotationsLeft = config->drivetrain->GetConfig().leftDrive.encoder->GetEncoderRotations();
-		double currentRotationsRight = config->drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations();
+
+		double currentRotationsLeft = config->invertLeftENC ? inverse(config->drivetrain->GetConfig().leftDrive.encoder->GetEncoderRotations()) : config->drivetrain->GetConfig().leftDrive.encoder->GetEncoderRotations();
+		double currentRotationsRight = config->invertRightENC ? inverse(config->drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations()) : config->drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations();
+
+		currentRotationsLeft += (currentRotationsLeft * config->gearBoxReduction);
+		currentRotationsRight += (currentRotationsRight * config->gearBoxReduction);
 
 		if (currentRotationsLeft != 0 || currentRotationsRight != 0) {
 			return ((currentRotationsLeft + currentRotationsRight)/2); // If both encoders are detected (not 0) use average
@@ -36,8 +40,12 @@ namespace wayfinder {
 	}
 
 	double RobotControl::currentLocation_M(Config *config) {
-		double currentRotationsLeft = config->drivetrain->GetConfig().leftDrive.encoder->GetEncoderRotations();
-		double currentRotationsRight = config->drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations();
+
+		double currentRotationsLeft = config->invertLeftENC ? inverse(config->drivetrain->GetConfig().leftDrive.encoder->GetEncoderRotations()) : config->drivetrain->GetConfig().leftDrive.encoder->GetEncoderRotations();
+		double currentRotationsRight = config->invertRightENC ? inverse(config->drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations()) : config->drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations();
+
+		currentRotationsLeft += (currentRotationsLeft * config->gearBoxReduction);
+		currentRotationsRight += (currentRotationsRight * config->gearBoxReduction);
 
 		double currentMetersLeft = currentRotationsLeft * (M_PI * config->wheelDiameter);
 		double currentMetersRight = currentRotationsRight * (M_PI * config->wheelDiameter);
@@ -63,13 +71,18 @@ namespace wayfinder {
 		if ((currentLocation_R(config)-_bar) >= _rotationsToTarget) {
 			return true;
 		} else {
-
-			double leftSpeed = internalPID(dt, _rotationsToTarget, config->drivetrain->GetConfig().leftDrive.encoder->GetEncoderRotations(), config);
-			double rightSpeed = internalPID(dt, _rotationsToTarget, config->drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations(), config);
+			
+			// PID left right speeds
+			double leftSpeed = internalPID(dt, _rotationsToTarget, currentLocation_R(config), config);
+			double rightSpeed = internalPID(dt, _rotationsToTarget, currentLocation_R(config), config);
 
 			// gyro follow
 			leftSpeed += gyroFollow(path, dt, config);
 			rightSpeed -= gyroFollow(path, dt, config);
+
+			// If reversed
+			leftSpeed = reverse ? inverse(leftSpeed) : leftSpeed;
+			rightSpeed = reverse ? inverse(rightSpeed) : rightSpeed;
 
 			// Limit power based on max speed (-1 to 1)
 			leftSpeed *= config->maxSpeed;

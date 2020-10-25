@@ -29,4 +29,8 @@ namespace wayfinder {
 	bool WayFinder::atWayPoint(int node, sPath path) {
 		return getWayPoint(node, path, _config);
 	}
+
+	double WayFinder::getCurrentLocation(Config *config, bool inMeters) {
+		return inMeters ? currentLocation_M(config) : currentLocation_R(config);
+	}
 }

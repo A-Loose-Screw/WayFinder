@@ -22,6 +22,11 @@ namespace wayfinder {
 		 * Returns true if robot is at waypoint number
 		 */
 		bool atWayPoint(int node, sPath path);
+
+		/**
+		 * Current Location in either rotations or meters
+		 */
+		double getCurrentLocation(Config *config, bool inMeters = false);
 	private:
 		Config *_config;
 	};
