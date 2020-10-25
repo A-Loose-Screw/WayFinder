@@ -53,7 +53,7 @@ wayfinder::RobotControl::Config wfdConfig{
 	0.001, // I
 	0.024, // D
 
-	8.24, // Gearbox reduction. (e.g 8.24 rotations = 1 wheen rotation)
+	8.24, // Gearbox reduction. (e.g 8.24 rotations = 1 wheel rotation)
 	0.1524, // Wheel diameter in meters
 	0.5, // Max speed of the robot overall
 	0.3, // Max speed of the robot when turning (overrided by overall max speed if higher)
