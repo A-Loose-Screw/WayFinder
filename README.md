@@ -35,9 +35,9 @@ Robot.cpp
 using namespace frc;
 using namespace wml;
 
-Drivetrain *drivetrain; // Create your drivetrain object (needs to be the same object you use for manual driving and auto driving)
+Drivetrain *drivetrain; // Create your drivetrain instance (needs to be the same object you use for manual driving and auto driving)
 
-wayfinder::WayFinder *wayFinder; // Create your wayfinder object
+wayfinder::WayFinder *wayFinder; // Create your wayfinder instance
 
 
 /**
