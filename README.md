@@ -49,7 +49,10 @@ actuators::MotorVoltageController rightMotors = actuators::MotorVoltageControlle
 Gearbox leftGearbox{ &leftMotors, &FL, 8.45 };
 Gearbox rightGearbox{ &rightMotors, &FR, 8.45 };
 
-DrivetrainConfig drivetrainConfig{ leftGearbox, rightGearbox };
+sensors::NavX navx{};
+sensors::NavXGyro gyro{ navx.Angular(sensors::AngularAxis::YAW) }; // wayfinder requires the gyroscope
+
+DrivetrainConfig drivetrainConfig{ leftGearbox, rightGearbox, &gyro };
 Drivetrain drivetrain{ drivetrainConfig }; // Create your drivetrain instance
 
 /**
