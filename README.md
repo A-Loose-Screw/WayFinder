@@ -56,7 +56,7 @@ wayfinder::RobotControl::Config wfdConfig{
 	8.24, // Gearbox reduction. (e.g 8.24 rotations = 1 wheel rotation)
 	0.1524, // Wheel diameter in meters
 	0.5, // Max speed of the robot overall
-	0.3, // Max speed of the robot when turning (overrided by overall max speed if higher)
+	0.3, // Max speed of the robot when turning (overrided by overall max speed if turning max speed is higher)
 };
 
 /**
@@ -155,7 +155,7 @@ sPath buildPath(sSpline spline); // returns a compiled path
 
 bool followPath(sPath path, double dt, bool reverse = false); // Follows path using input dt, returns true once path is complete
 
-bool atWayPoint(int node, sPath); // Returns true if robot is at the waypoint node provided
+bool atWayPoint(int node, sPath); // Returns true if robot is at the waypoint node or has traveled past it
 
 double getCurrentLocation(Config *config, bool inMeters = false); // Returns the robots current location in spline. Either in rotations of wheel or meters
 
