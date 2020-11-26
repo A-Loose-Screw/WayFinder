@@ -35,16 +35,37 @@ Robot.cpp
 using namespace frc;
 using namespace wml;
 
-Drivetrain *drivetrain; // Create your drivetrain object (needs to be the same object you use for manual driving and auto driving)
+/**
+ * Setup your drivetrain (example below)
+ */
+SparkMax FL{ 12, SparkMax::MotorType::kNEO, 42 };
+SparkMax BL{ 13, SparkMax::MotorType::kNEO, 42 };
+SparkMax FR{ 10, SparkMax::MotorType::kNEO, 42 };
+SparkMax BR{ 11, SparkMax::MotorType::kNEO, 42 };
 
-wayfinder::WayFinder *wayFinder; // Create your wayfinder object
+actuators::MotorVoltageController leftMotors = actuators::MotorVoltageController::Group(FL, BL);
+actuators::MotorVoltageController rightMotors = actuators::MotorVoltageController::Group(FR, BR);
+
+Gearbox leftGearbox{ &leftMotors, &FL, 8.45 };
+Gearbox rightGearbox{ &rightMotors, &FR, 8.45 };
+
+sensors::NavX navx{};
+sensors::NavXGyro gyro{ navx.Angular(sensors::AngularAxis::YAW) }; // wayfinder requires the gyroscope
+
+DrivetrainConfig drivetrainConfig{ leftGearbox, rightGearbox, &gyro };
+Drivetrain drivetrain{ drivetrainConfig }; // Create your drivetrain instance
+
+/**
+ * Setup wayfinder
+ */
+wayfinder::WayFinder *wayFinder; // Create your wayfinder instance
 
 
 /**
  * Configure your wayfinder options to be used during auto
  */
 wayfinder::RobotControl::Config wfdConfig{
-	drivetrain, // Pass in your drivetrain (requires a pointer)
+	&drivetrain, // Pass in your drivetrain (requires a pointer)
 
 	true, // Invert your left encoder
 	false, // Invert your right encoder
@@ -53,10 +74,10 @@ wayfinder::RobotControl::Config wfdConfig{
 	0.001, // I
 	0.024, // D
 
-	8.24, // Gearbox reduction. (e.g 8.24 rotations = 1 wheen rotation)
+	8.24, // Gearbox reduction. (e.g 8.24 rotations = 1 wheel rotation)
 	0.1524, // Wheel diameter in meters
 	0.5, // Max speed of the robot overall
-	0.3, // Max speed of the robot when turning (overrided by overall max speed if higher)
+	0.3, // Max speed of the robot when turning
 };
 
 /**
@@ -155,7 +176,7 @@ sPath buildPath(sSpline spline); // returns a compiled path
 
 bool followPath(sPath path, double dt, bool reverse = false); // Follows path using input dt, returns true once path is complete
 
-bool atWayPoint(int node, sPath); // Returns true if robot is at the waypoint node provided
+bool atWayPoint(int node, sPath); // Returns true if robot is at the waypoint node or has traveled past it
 
 double getCurrentLocation(Config *config, bool inMeters = false); // Returns the robots current location in spline. Either in rotations of wheel or meters
 
