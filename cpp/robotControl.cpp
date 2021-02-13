@@ -68,7 +68,7 @@ namespace wayfinder {
 		_rotationsToTarget = rotationsToTarget(path, config);
 
 		// Check if at target
-		if ((currentLocation_R(config)-_bar) >= _rotationsToTarget) {
+		if ((currentLocation_R(config)+_bar) >= _rotationsToTarget) {
 			return true;
 		} else {
 			
