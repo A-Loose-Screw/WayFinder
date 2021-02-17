@@ -14,7 +14,7 @@ namespace wayfinder {
 
 		struct sSpline {
 			std::vector<sPoint> points;
-			sPoint CtrlPt1 = points.front(), CtrlPt2 = points.back();
+			sPoint CtrlPt1, CtrlPt2;
 		};
 
 		struct sPath {

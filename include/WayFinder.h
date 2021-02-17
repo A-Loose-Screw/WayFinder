@@ -3,7 +3,7 @@
 namespace wayfinder {
 	class WayFinder : protected RobotControl {
 	public:
-		WayFinder(Config *config);
+		WayFinder(Config &config);
 		~WayFinder();
 
 		/**
@@ -26,8 +26,12 @@ namespace wayfinder {
 		/**
 		 * Current Location in either rotations or meters
 		 */
-		double getCurrentLocation(Config *config, bool inMeters = false);
+		double getCurrentLocation(Config &config, bool inMeters = false);
+
+		void drive(Config &config) {
+			config.drivetrain->Set(0.1, 0.1);
+		}
 	private:
-		Config *_config;
+		Config &_config;
 	};
 }

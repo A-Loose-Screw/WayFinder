@@ -30,16 +30,16 @@ namespace wayfinder {
 	void setBarStop(double bar) {_bar = bar;}
 
 	protected:
-		bool driveToTarget(sPath path, bool reverse, double dt, Config *config);
-		bool getWayPoint(int node, sPath path, Config *config);
-		double currentLocation_M(Config *config); // Gets location average between encoders in meters or working encoder value in meters
-		double currentLocation_R(Config *config); // Gets location average between encoders in rotations or working encoder value in rotations
+		bool driveToTarget(sPath path, bool reverse, double dt, Config &config);
+		bool getWayPoint(int node, sPath path, Config &config);
+		double currentLocation_M(Config &config); // Gets location average between encoders in meters or working encoder value in meters
+		double currentLocation_R(Config &config); // Gets location average between encoders in rotations or working encoder value in rotations
 	private:
 
 		// Functions
-		double rotationsToTarget(sPath path, Config *config); // returns length of target in rotations
-		double internalPID(double dt, double goal, double input, Config *config); // PID for drivebase
-		double gyroFollow(sPath path, double dt, Config *config); // follow gyro (returns power for drivebase)
+		double rotationsToTarget(sPath path, Config &config); // returns length of target in rotations
+		double internalPID(double dt, double goal, double input, Config &config); // PID for drivebase
+		double gyroFollow(sPath path, double dt, Config &config); // follow gyro (returns power for drivebase)
 
 
 		// PID/PathComplete Vals

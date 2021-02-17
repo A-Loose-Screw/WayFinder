@@ -1,13 +1,17 @@
 #include "WayFinder.h"
 
 namespace wayfinder {
-	WayFinder::WayFinder(Config *config) {
-		_config = config;
+	WayFinder::WayFinder(Config &config) : _config(config) {
+		std::cout << "Wayfinder buid successful" << std::endl;
+
+		// @TODO Output config to console
 	}
 
 	// Approixmate length of spline & nodes
 	Path::sPath WayFinder::buildPath(sSpline spline) {
 		double totalPathLength = 0.0f;
+
+		std::cout << "path building?" << std::endl;
 
 		// Add the control points to the start and end of spline
 		spline.points.insert(spline.points.begin(), spline.CtrlPt1);
@@ -30,7 +34,7 @@ namespace wayfinder {
 		return getWayPoint(node, path, _config);
 	}
 
-	double WayFinder::getCurrentLocation(Config *config, bool inMeters) {
+	double WayFinder::getCurrentLocation(Config &config, bool inMeters) {
 		return inMeters ? currentLocation_M(config) : currentLocation_R(config);
 	}
 }
