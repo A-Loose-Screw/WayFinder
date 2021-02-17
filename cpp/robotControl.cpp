@@ -2,7 +2,6 @@
 
 namespace wayfinder {
 	double RobotControl::rotationsToTarget(sPath path, Config &config) {
-		// double distanceCM = path.pathLength*100;
 		return (config.gearBoxReduction * (path.pathLength/(M_PI * config.wheelDiameter)));
 	}
 
@@ -21,22 +20,30 @@ namespace wayfinder {
 	}
 
 	double inverse(double input) {
-		return -abs(input);
+		return -input;
 	}
 
 	double RobotControl::currentLocation_R(Config &config) {
 
-		double currentRotationsLeft = config.invertLeftENC ? inverse(config.drivetrain->GetConfig().leftDrive.encoder->GetEncoderRotations()) : config.drivetrain->GetConfig().leftDrive.encoder->GetEncoderRotations();
-		double currentRotationsRight = config.invertRightENC ? inverse(config.drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations()) : config.drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations();
+		double currentRotationsLeft = config.invertLeftENC == true ? inverse(config.drivetrain->GetConfig().leftDrive.encoder->GetEncoderRotations()) : config.drivetrain->GetConfig().leftDrive.encoder->GetEncoderRotations();
+		double currentRotationsRight = config.invertRightENC == true ? inverse(config.drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations()) : config.drivetrain->GetConfig().rightDrive.encoder->GetEncoderRotations();
 
 		currentRotationsLeft *= config.gearBoxReduction;
 		currentRotationsRight *= config.gearBoxReduction;
 
-		if (currentRotationsLeft != 0 || currentRotationsRight != 0) {
-			return ((currentRotationsLeft + currentRotationsRight)/2); // If both encoders are detected (not 0) use average
-		} else {
-			return abs(currentRotationsLeft) > abs(currentRotationsRight) ? currentRotationsLeft : currentRotationsRight; // else use whichever encoder has a value or has a bigger value than the other (encoder might disconnect during match)
-		}
+		// if (currentRotationsLeft != 0 || currentRotationsRight != 0) {
+		// 	return ((currentRotationsLeft + currentRotationsRight)/2); // If both encoders are detected (not 0) use average
+		// } else {
+		// 	return fabs(currentRotationsLeft) > fabs(currentRotationsRight) ? currentRotationsLeft : currentRotationsRight; // else use whichever encoder has a value or has a bigger value than the other (encoder might disconnect during match)
+		// }
+
+		// std::cout << "Left Invert: " << config.invertLeftENC << std::endl;
+		// std::cout << "Right Invert: " << config.invertRightENC << std::endl;
+
+		std::cout << "Rotations left: " << currentRotationsLeft << std::endl;
+		std::cout << "Rotations right: " << currentRotationsRight << std::endl;
+ 
+		return ((currentRotationsLeft + currentRotationsRight)/2); // If both encoders are detected (not 0) use average
 	}
 
 	double RobotControl::currentLocation_M(Config &config) {
@@ -50,11 +57,12 @@ namespace wayfinder {
 		double currentMetersLeft = currentRotationsLeft * (M_PI * config.wheelDiameter);
 		double currentMetersRight = currentRotationsRight * (M_PI * config.wheelDiameter);
 
-		if (currentRotationsLeft != 0 || currentRotationsRight != 0) {
-			return ((currentMetersLeft + currentMetersRight)/2); // If both encoders are detected (not 0) use average
-		} else {
-			return abs(currentMetersLeft) > abs(currentMetersRight) ? currentMetersLeft : currentMetersRight; // else use whichever encoder has a value or has a bigger value than the other (encoder might disconnect during match)
-		}
+		// if (currentRotationsLeft != 0 || currentRotationsRight != 0) {
+		// 	return ((currentMetersLeft + currentMetersRight)/2); // If both encoders are detected (not 0) use average
+		// } else {
+		// 	return fabs(currentMetersLeft) > fabs(currentMetersRight) ? currentMetersLeft : currentMetersRight; // else use whichever encoder has a value or has a bigger value than the other (encoder might disconnect during match)
+		// }
+		return ((currentMetersLeft + currentMetersRight)/2); // If both encoders are detected (not 0) use average
 	}
 
 	double RobotControl::gyroFollow(sPath path, double dt, Config &config) {
@@ -68,7 +76,8 @@ namespace wayfinder {
 		_rotationsToTarget = rotationsToTarget(path, config);
 
 		// Check if at target
-		if ((currentLocation_R(config)-_bar) >= _rotationsToTarget) {
+		if ((currentLocation_R(config)) >= _rotationsToTarget) {
+			config.drivetrain->Set(0,0);
 			return true;
 		} else {
 			
