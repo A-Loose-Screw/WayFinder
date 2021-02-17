@@ -1,7 +1,7 @@
 #include "robotControl.h"
 
 namespace wayfinder {
-	class WayFinder : protected RobotControl {
+	class WayFinder : public RobotControl {
 	public:
 		WayFinder(Config &config);
 		~WayFinder();

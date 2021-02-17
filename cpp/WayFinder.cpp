@@ -11,7 +11,7 @@ namespace wayfinder {
 	Path::sPath WayFinder::buildPath(sSpline spline) {
 		double totalPathLength = 0.0f;
 
-		std::cout << "path building?" << std::endl;
+		std::cout << "path building" << std::endl;
 
 		// Add the control points to the start and end of spline
 		spline.points.insert(spline.points.begin(), spline.CtrlPt1);
@@ -21,6 +21,10 @@ namespace wayfinder {
 			totalPathLength += (spline.points[i].segLength = calculateSegLength(i, spline));
 			spline.points[i].totalLength = totalPathLength;
 		}
+
+		std::cout << "CtrlPt1: " << spline.points[0].x << "," << spline.points[0].y << std::endl;
+		std::cout << "CtrlPt2: " << spline.points[3].x << "," << spline.points[3].y << std::endl;
+
 
 		sPath path{spline, totalPathLength};
 		return path;

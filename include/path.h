@@ -1,5 +1,6 @@
 #include <vector>
 #include <math.h>
+#include <iostream>
 
 namespace wayfinder {
 	class Path {

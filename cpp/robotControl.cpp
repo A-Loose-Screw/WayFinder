@@ -2,8 +2,8 @@
 
 namespace wayfinder {
 	double RobotControl::rotationsToTarget(sPath path, Config &config) {
-		double distanceCM = path.pathLength*100;
-		return (config.gearBoxReduction * (distanceCM/(M_PI * config.wheelDiameter)));
+		// double distanceCM = path.pathLength*100;
+		return (config.gearBoxReduction * (path.pathLength/(M_PI * config.wheelDiameter)));
 	}
 
 	double RobotControl::internalPID(double dt, double goal, double input, Config &config) {
@@ -68,7 +68,7 @@ namespace wayfinder {
 		_rotationsToTarget = rotationsToTarget(path, config);
 
 		// Check if at target
-		if ((currentLocation_R(config)+_bar) >= _rotationsToTarget) {
+		if ((currentLocation_R(config)-_bar) >= _rotationsToTarget) {
 			return true;
 		} else {
 			
