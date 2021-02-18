@@ -23,6 +23,9 @@ In the above example, the robot would start at 0 degrees. Then follow the curved
 
 - WayFinder uses waypoints in meters to get from A to B, mapping out your robot starting location on the feild (X & Y position) and where you want it to end up (X & Y) using waypoints in between them to define the curved trajectory the robot will take to it's target. (It uses the `catmull-rom spline` algorithm to acheive this. You can see how this style of curve reacts in helpfull apps like desmos https://www.desmos.com/calculator/9kazaxavsf and others like it)
 
+
+- [PathBuilder](pathBuilder/README.md) You can also use the included path builder to view the waypoints. (It does not acurately represet your robot, merely give you an idea on how the splines are created and how the robot *should* follow the spline)
+
 - You can have an infinite amount of waypoints. But are required to have 2 control points no matter how small or big the spline is. This is to insure you can control it's starting and end curves accurately in the spline. Unlike the waypoints in between which uses the waypoints before and after to define it's curve. By default the control points are the same value as the start and end of your spline.
 
 - After defining your waypoints (in meters) and control points (in meters), you'll also need to call the `buildPath()` function to compile your spline into a path. This converts your waypoints into a curved trajectory with known length, gradients and positions it can use in the follower. (Because this uses loops and a few calculations to compile. Call it only at startup NOT IN PERIODIC)
