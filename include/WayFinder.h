@@ -28,8 +28,11 @@ namespace wayfinder {
 		 */
 		double getCurrentLocation(Config &config, bool inMeters = false);
 
-		void drive(Config &config) {
-			config.drivetrain->Set(0.1, 0.1);
+		/**
+		 * Drive test (just tests with config settings)
+		 */
+		void drive(Config &config, double leftSpeed, double rightSpeed) {
+			config.drivetrain->Set(leftSpeed, rightSpeed);
 		}
 	private:
 		Config &_config;

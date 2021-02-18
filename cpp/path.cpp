@@ -44,7 +44,7 @@ namespace wayfinder {
 		double tx = 0.5f * (spline.points[p0].x * q1 + spline.points[p1].x * q2 + spline.points[p2].x * q3 + spline.points[p3].x * q4);
 		double ty = 0.5f * (spline.points[p0].y * q1 + spline.points[p1].y * q2 + spline.points[p2].y * q3 + spline.points[p3].y * q4);
 
-		return{ tx, ty };
+		return { tx, ty };
 	}
 
 	double Path::getSplineAngle_Rad(double t, sSpline spline) {
