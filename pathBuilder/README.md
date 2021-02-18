@@ -11,13 +11,13 @@ Quick and simplistic way to view catmull-rom splines (Does not acurately represe
 
 ## Commands
 
-###### Creating waypoints
+##### Creating waypoints
 - use `v` to add, and `f` to remove waypoints
-###### Selecting waypoints
+##### Selecting waypoints
 - use `z` to cycle left, and `x` to cycle right
-###### Moving waypoints
+##### Moving waypoints
 - Use arrow keys on selected waypoints to move them
-###### Drive robot along path
+##### Drive robot along path
 - Use `A` and `S` to traverse the path, where `S` is forwards
-###### Wrap around path
+##### Wrap around path
 - Use `C` to make path wrap around and become continuous
