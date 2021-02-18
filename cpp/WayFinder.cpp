@@ -2,16 +2,24 @@
 
 namespace wayfinder {
 	WayFinder::WayFinder(Config &config) : _config(config) {
-		std::cout << "Wayfinder buid successful" << std::endl;
 
 		// @TODO Output config to console
+		std::cout << "*** WayFinder Config ***" << std::endl;
+
+		std::cout << "Left Encoder Invert: " << _config.invertLeftENC << std::endl;
+		std::cout << "Right Encoder Invert: " << _config.invertRightENC << std::endl;
+
+		std::cout << "PID: " << _config.kp << ", " << _config.ki << ", " << _config.kd << std::endl;
+		std::cout << "Reduction " << _config.gearBoxReduction << ":1" << std::endl;
+		std::cout << "Max Speed: " << _config.maxSpeed << std::endl;
+		std::cout << "Max Turn Speed: " << _config.maxTurnSpeed << std::endl;
 	}
 
 	// Approixmate length of spline & nodes
 	Path::sPath WayFinder::buildPath(sSpline spline) {
 		double totalPathLength = 0.0f;
 
-		std::cout << "path building" << std::endl;
+		std::cout << "\n** " << spline.name << " " << "Path Building **" << std::endl;
 
 		// Add the control points to the start and end of spline
 		spline.points.insert(spline.points.begin(), spline.CtrlPt1);
@@ -26,7 +34,8 @@ namespace wayfinder {
 		std::cout << "CtrlPt2: " << spline.points[3].x << "," << spline.points[3].y << std::endl;
 
 
-		sPath path{spline, totalPathLength};
+		sPath path{spline, totalPathLength, spline.name};
+		std::cout << "Total Length: " << path.pathLength << std::endl;
 		return path;
 	}
 

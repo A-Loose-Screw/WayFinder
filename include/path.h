@@ -1,6 +1,7 @@
 #include <vector>
 #include <math.h>
 #include <iostream>
+#include <string>
 
 namespace wayfinder {
 	class Path {
@@ -16,11 +17,13 @@ namespace wayfinder {
 		struct sSpline {
 			std::vector<sPoint> points;
 			sPoint CtrlPt1, CtrlPt2;
+			std::string name;
 		};
 
 		struct sPath {
 			sSpline spline;
 			double pathLength = 0; // In meters
+			std::string name;
 		};
 
 		/**
