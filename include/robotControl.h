@@ -12,13 +12,13 @@ namespace wayfinder {
 			bool invertRightENC = false;
 
 			// Characterise Vals
-			double &kp_drive,
-			&ki_drive,
-			&kd_drive,
+			double kp_drive,
+			ki_drive,
+			kd_drive,
 
-			&kp_turn,
-			&ki_turn,
-			&kd_turn,
+			kp_turn,
+			ki_turn,
+			kd_turn,
 
 			gearBoxReduction = 0,
 			wheelDiameter = 0, // In meters
