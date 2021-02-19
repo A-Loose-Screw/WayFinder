@@ -10,18 +10,18 @@ namespace wayfinder {
 		}
 	}
 
-	double RobotControl::internalPID(double dt, double goal, double input, Config &config, bool driveLoop) {
+	double RobotControl::internalPID(double dt, double goal, double input, Config &config, bool turnLoop) {
 		double error = goal - input;
 		double derror = (error - _previousError)/dt;
 
 		_sum = _sum + error * dt;
 
-		double output;
+		double output = 0;
 
-		if (driveLoop) {
-			output = config.kp_drive * error + config.ki_drive * _sum + config.kd_drive * derror;
-		} else {
+		if (turnLoop) {
 			output = config.kp_turn * error + config.ki_turn * _sum + config.kd_turn * derror;
+		} else {
+			output = config.kp_drive * error + config.ki_drive * _sum + config.kd_drive * derror;
 		}
 		
 		// Just in case the PID is a bit wack. (make sure value is between -1 and 1)
@@ -78,7 +78,7 @@ namespace wayfinder {
 
 	double RobotControl::gyroFollow(sPath path, double dt, Config &config) {
 		double gyroGoal = getSplineAngle_Deg(currentLocation_M(config), path.spline);
-		double output = internalPID(dt, gyroGoal, config.drivetrain->GetConfig().gyro->GetAngle(), config, false);
+		double output = internalPID(dt, gyroGoal, config.drivetrain->GetConfig().gyro->GetAngle(), config, true);
 		output *= config.maxTurnSpeed; // Limit turn speed. (Just in case it's a bit too jittery)
 		return output;
 	}
@@ -93,8 +93,8 @@ namespace wayfinder {
 		} else {
 			
 			// PID left right speeds
-			double leftSpeed = internalPID(dt, _rotationsToTarget, currentLocation_R(config), config);
-			double rightSpeed = internalPID(dt, _rotationsToTarget, currentLocation_R(config), config);
+			double leftSpeed = internalPID(dt, _rotationsToTarget, currentLocation_R(config), config, false);
+			double rightSpeed = internalPID(dt, _rotationsToTarget, currentLocation_R(config), config, false);
 
 			// gyro follow
 			leftSpeed += gyroFollow(path, dt, config);

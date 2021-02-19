@@ -46,8 +46,8 @@ namespace wayfinder {
 		 */
 		void testDrivePID(double dt, Config &config, double meters2drive = 2) {
 			double goalRotations = (meters2drive/(M_PI * config.wheelDiameter));
-			double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
-			double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
+			double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, true);
+			double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, true);
 			
 			leftSpeed *= config.maxSpeed;
 			rightSpeed *= config.maxSpeed;
@@ -59,12 +59,12 @@ namespace wayfinder {
 		 * turns 90 degrees or by parameter set
 		 */
 		void testTurnPID(double dt, Config &config, double angle2turn = 90) {
-			double angleSpeed = internalPID(dt, angle2turn, config.drivetrain->GetConfig().gyro->GetAngle(), config, false);
+			double angleSpeed = internalPID(dt, angle2turn, config.drivetrain->GetConfig().gyro->GetAngle(), config, true);
 			double leftSpeed = 0, rightSpeed = 0;
 			
 			angleSpeed *= config.maxTurnSpeed;
 			leftSpeed += angleSpeed;
-			rightSpeed -= rightSpeed;
+			rightSpeed -= angleSpeed;
 
 			config.drivetrain->Set(leftSpeed, rightSpeed);
 		}
@@ -110,7 +110,7 @@ namespace wayfinder {
 	private:
 		// Functions
 		double rotationsToTarget(sPath path, Config &config, bool wheelRotations); // returns length of target in rotations
-		double internalPID(double dt, double goal, double input, Config &config, bool driveLoop = true); // PID for drivebase
+		double internalPID(double dt, double goal, double input, Config &config, bool turnLoop = false); // PID for drivebase
 		double gyroFollow(sPath path, double dt, Config &config); // follow gyro (returns power for drivebase)
 
 
