@@ -107,7 +107,6 @@ namespace wayfinder {
 		
 			return false;
 		}
-
 	}
 
 	bool RobotControl::getWayPoint(int node, sPath path, Config &config) {

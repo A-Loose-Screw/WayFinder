@@ -84,6 +84,14 @@ namespace wayfinder {
 
 			config.drivetrain->Set(leftSpeed, rightSpeed);
 		}
+
+		double getCurrentLocation(Config &config, bool meters = false, bool wheelRotations = true) {
+			if (meters) {
+				return currentLocation_M(config);
+			} else {
+				currentLocation_R(config, wheelRotations);
+			}
+		}
 	protected:
 
 		bool driveToTarget(sPath path, bool reverse, double dt, Config &config);
