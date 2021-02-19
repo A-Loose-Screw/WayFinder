@@ -12,9 +12,9 @@ namespace wayfinder {
 			bool invertRightENC = false;
 
 			// Characterise Vals
-			double kp = 0,
-			ki = 0,
-			kd = 0,
+			double &kp,
+			&ki,
+			&kd,
 			gearBoxReduction = 0,
 			wheelDiameter = 0, // In meters
 			maxSpeed = 0,
