@@ -44,7 +44,7 @@ namespace wayfinder {
 		double tx = 0.5f * (spline.points[p0].x * q1 + spline.points[p1].x * q2 + spline.points[p2].x * q3 + spline.points[p3].x * q4);
 		double ty = 0.5f * (spline.points[p0].y * q1 + spline.points[p1].y * q2 + spline.points[p2].y * q3 + spline.points[p3].y * q4);
 
-		return{ tx, ty };
+		return { tx, ty };
 	}
 
 	double Path::getSplineAngle_Rad(double t, sSpline spline) {
@@ -59,8 +59,8 @@ namespace wayfinder {
 	// Calculate seg length needs to happen once. (in loop. will slow robot down)
 	// Calculation is approximation (There is no answer to life... except 42)
 	double Path::calculateSegLength(int node, sSpline spline) {
-		double length = 0.0f;
-		double stepSize = 0.005f;
+		double length = 0.0;
+		double stepSize = 0.005;
 
 		sPoint old_point, new_point;
 		old_point = getSplinePoint((double)node, spline);
@@ -73,7 +73,11 @@ namespace wayfinder {
 			length += sqrt(bufferLength);
 
 			old_point = new_point;
+
+			std::cout << "Length Continuum: " << length << std::endl;
 		}
+
+		std::cout << "Final Length: " << length << std::endl;
 
 		return length;
 	}

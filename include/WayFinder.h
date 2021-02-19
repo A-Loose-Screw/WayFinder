@@ -1,9 +1,9 @@
 #include "robotControl.h"
 
 namespace wayfinder {
-	class WayFinder : protected RobotControl {
+	class WayFinder : public RobotControl {
 	public:
-		WayFinder(Config *config);
+		WayFinder(Config &config);
 		~WayFinder();
 
 		/**
@@ -26,8 +26,15 @@ namespace wayfinder {
 		/**
 		 * Current Location in either rotations or meters
 		 */
-		double getCurrentLocation(Config *config, bool inMeters = false);
+		double getCurrentLocation(Config &config, bool inMeters = false);
+
+		/**
+		 * Drive test (just tests with config settings)
+		 */
+		void drive(Config &config, double leftSpeed, double rightSpeed) {
+			config.drivetrain->Set(leftSpeed, rightSpeed);
+		}
 	private:
-		Config *_config;
+		Config &_config;
 	};
 }
