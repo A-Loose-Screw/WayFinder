@@ -34,5 +34,10 @@ namespace wayfinder {
 		double getSplineAngle_Rad(double t, sSpline spline);
 		double getSplineAngle_Deg(double t, sSpline spline);
 		double calculateSegLength(int node, sSpline spline);
+
+		void setStepSize(double stepSize) { this->_stepSize = stepSize; }
+		
+	 private:
+		double _stepSize = 0.005f;
 	};
 }

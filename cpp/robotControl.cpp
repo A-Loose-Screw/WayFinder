@@ -112,7 +112,7 @@ namespace wayfinder {
 
 	bool RobotControl::getWayPoint(int node, sPath path, Config &config) {
 		double nodePointLength = path.spline.points[node].totalLength;
-		if ((currentLocation_R(config)-_bar) >= nodePointLength) {
+		if ((currentLocation_M(config)-_bar) >= nodePointLength) {
 			return true;
 		} else {
 			return false;

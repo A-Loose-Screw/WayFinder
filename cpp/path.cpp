@@ -59,8 +59,8 @@ namespace wayfinder {
 	// Calculate seg length needs to happen once. (in loop. will slow robot down)
 	// Calculation is approximation (There is no answer to life... except 42)
 	double Path::calculateSegLength(int node, sSpline spline) {
-		double length = 0.0;
-		double stepSize = 0.005;
+		double length = 0.0f;
+		double stepSize = _stepSize;
 
 		sPoint old_point, new_point;
 		old_point = getSplinePoint((double)node, spline);
