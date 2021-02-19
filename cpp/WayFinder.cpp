@@ -9,7 +9,9 @@ namespace wayfinder {
 		std::cout << "Left Encoder Invert: " << _config.invertLeftENC << std::endl;
 		std::cout << "Right Encoder Invert: " << _config.invertRightENC << std::endl;
 
-		std::cout << "PID: " << _config.kp << ", " << _config.ki << ", " << _config.kd << std::endl;
+		std::cout << "PID Drive: " << _config.kp_drive << ", " << _config.ki_drive << ", " << _config.kd_drive << std::endl;
+		std::cout << "PID Turn: " << _config.kp_turn << ", " << _config.ki_turn << ", " << _config.kd_turn << std::endl;
+
 		std::cout << "Reduction " << _config.gearBoxReduction << ":1" << std::endl;
 		std::cout << "Max Speed: " << _config.maxSpeed << std::endl;
 		std::cout << "Max Turn Speed: " << _config.maxTurnSpeed << std::endl;
