@@ -35,6 +35,55 @@ namespace wayfinder {
 		double getRotationsToTarget(sPath path, Config &config, bool wheelRotations = false) {
 			return rotationsToTarget(path, config, wheelRotations);
 		}
+
+		/**
+		 * Test PID driving for 2 meters or by parameter set
+		 */
+		void testDrivePID(double dt, Config &config, double meters2drive = 2) {
+			double goalRotations = (meters2drive/(M_PI * config.wheelDiameter));
+			double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
+			double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
+			
+			leftSpeed *= config.maxSpeed;
+			rightSpeed *= config.maxSpeed;
+
+			config.drivetrain->Set(leftSpeed, rightSpeed);
+		}
+
+		/**
+		 * turns 90 degrees or by parameter set
+		 */
+		void testTurnPID(double dt, Config &config, double angle2turn = 90) {
+			double angleSpeed = internalPID(dt, angle2turn, config.drivetrain->GetConfig().gyro->GetAngle(), config);
+			double leftSpeed = 0, rightSpeed = 0;
+			
+			angleSpeed *= config.maxTurnSpeed;
+			leftSpeed += angleSpeed;
+			rightSpeed -= rightSpeed;
+
+			config.drivetrain->Set(leftSpeed, rightSpeed);
+		}
+
+		/**
+		 * Test full PID to length and turn
+		 */
+		void testPID(double dt, Config &config, double meters2drive = 2, double angle2turn = 90) {
+			double goalRotations = (meters2drive/(M_PI * config.wheelDiameter));
+			double angleSpeed = internalPID(dt, angle2turn, config.drivetrain->GetConfig().gyro->GetAngle(), config);
+
+			angleSpeed *= config.maxTurnSpeed;
+
+			double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
+			double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
+			
+			leftSpeed += angleSpeed;
+			rightSpeed -= angleSpeed;
+
+			leftSpeed *= config.maxSpeed;
+			rightSpeed *= config.maxSpeed;
+
+			config.drivetrain->Set(leftSpeed, rightSpeed);
+		}
 	protected:
 
 		bool driveToTarget(sPath path, bool reverse, double dt, Config &config);
