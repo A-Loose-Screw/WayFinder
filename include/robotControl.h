@@ -12,13 +12,13 @@ namespace wayfinder {
 			bool invertRightENC = false;
 
 			// Characterise Vals
-			double kp_drive,
-			ki_drive,
-			kd_drive,
+			double *kp_drive,
+			*ki_drive,
+			*kd_drive,
 
-			kp_turn,
-			ki_turn,
-			kd_turn,
+			*kp_turn,
+			*ki_turn,
+			*kd_turn,
 
 			gearBoxReduction = 0,
 			wheelDiameter = 0, // In meters
@@ -44,62 +44,24 @@ namespace wayfinder {
 		/**
 		 * Test PID driving for 2 meters or by parameter set
 		 */
-		void testDrivePID(double dt, Config &config, double meters2drive = 2) {
-			double goalRotations = (meters2drive/(M_PI * config.wheelDiameter));
-			double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, true);
-			double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, true);
-			
-			leftSpeed *= config.maxSpeed;
-			rightSpeed *= config.maxSpeed;
-
-			config.drivetrain->Set(leftSpeed, rightSpeed);
-		}
+		void testDrivePID(double dt, Config &config, double meters2drive = 2);
 
 		/**
 		 * turns 90 degrees or by parameter set
 		 */
-		void testTurnPID(double dt, Config &config, double angle2turn = 90) {
-			double angleSpeed = internalPID(dt, angle2turn, config.drivetrain->GetConfig().gyro->GetAngle(), config, true);
-			double leftSpeed = 0, rightSpeed = 0;
-			
-			angleSpeed *= config.maxTurnSpeed;
-			leftSpeed += angleSpeed;
-			rightSpeed -= angleSpeed;
-
-			config.drivetrain->Set(leftSpeed, rightSpeed);
-		}
+		void testTurnPID(double dt, Config &config, double angle2turn = 90);
 
 		/**
 		 * Test full PID to length and turn
 		 */
-		void testPID(double dt, Config &config, double meters2drive = 2, double angle2turn = 90) {
-			double goalRotations = (meters2drive/(M_PI * config.wheelDiameter));
-			double angleSpeed = internalPID(dt, angle2turn, config.drivetrain->GetConfig().gyro->GetAngle(), config, false);
+		void testPID(double dt, Config &config, double meters2drive = 2, double angle2turn = 90);
 
-			angleSpeed *= config.maxTurnSpeed;
-
-			double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
-			double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
-			
-			leftSpeed += angleSpeed;
-			rightSpeed -= angleSpeed;
-
-			leftSpeed *= config.maxSpeed;
-			rightSpeed *= config.maxSpeed;
-
-			config.drivetrain->Set(leftSpeed, rightSpeed);
-		}
 
 		/**
 		 * Get current locations
 		 */
-		double getCurrentLocation(Config &config, bool meters = false, bool wheelRotations = true) {
-			if (meters) {
-				return currentLocation_M(config);
-			} else {
-				currentLocation_R(config, wheelRotations);
-			}
-		}
+		double getCurrentLocation(Config &config, bool meters = false, bool wheelRotations = true);
+		
 	protected:
 
 		bool driveToTarget(sPath path, bool reverse, double dt, Config &config);

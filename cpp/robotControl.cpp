@@ -19,9 +19,9 @@ namespace wayfinder {
 		double output = 0;
 
 		if (turnLoop) {
-			output = config.kp_turn * error + config.ki_turn * _sum + config.kd_turn * derror;
+			output = *config.kp_turn * error + *config.ki_turn * _sum + *config.kd_turn * derror;
 		} else {
-			output = config.kp_drive * error + config.ki_drive * _sum + config.kd_drive * derror;
+			output = *config.kp_drive * error + *config.ki_drive * _sum + *config.kd_drive * derror;
 		}
 		
 		// Just in case the PID is a bit wack. (make sure value is between -1 and 1)
@@ -30,9 +30,58 @@ namespace wayfinder {
 		return output;
 	}
 
+	void RobotControl::testDrivePID(double dt, Config &config, double meters2drive) {
+		double goalRotations = (meters2drive/(M_PI * config.wheelDiameter));
+		double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, true);
+		double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, true);
+		
+		leftSpeed *= config.maxSpeed;
+		rightSpeed *= config.maxSpeed;
+
+		config.drivetrain->Set(leftSpeed, rightSpeed);
+	}
+
+	void RobotControl::testTurnPID(double dt, Config &config, double angle2turn) {
+		double angleSpeed = internalPID(dt, angle2turn, config.drivetrain->GetConfig().gyro->GetAngle(), config, true);
+		double leftSpeed = 0, rightSpeed = 0;
+		
+		angleSpeed *= config.maxTurnSpeed;
+		leftSpeed += angleSpeed;
+		rightSpeed -= angleSpeed;
+
+		config.drivetrain->Set(leftSpeed, rightSpeed);
+	}
+
 	double inverse(double input) {
 		return -input;
 	}
+
+	void RobotControl::testPID(double dt, Config &config, double meters2drive, double angle2turn) {
+		double goalRotations = (meters2drive/(M_PI * config.wheelDiameter));
+		double angleSpeed = internalPID(dt, angle2turn, config.drivetrain->GetConfig().gyro->GetAngle(), config, false);
+
+		angleSpeed *= config.maxTurnSpeed;
+
+		double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
+		double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
+		
+		leftSpeed += angleSpeed;
+		rightSpeed -= angleSpeed;
+
+		leftSpeed *= config.maxSpeed;
+		rightSpeed *= config.maxSpeed;
+
+		config.drivetrain->Set(leftSpeed, rightSpeed);
+	}
+
+	double RobotControl::getCurrentLocation(Config &config, bool meters, bool wheelRotations) {
+		if (meters) {
+			return currentLocation_M(config);
+		} else {
+			return currentLocation_R(config, wheelRotations);
+		}
+	}
+
 
 	double RobotControl::currentLocation_R(Config &config, bool wheelRotations) { // Location in wheel rotations (not motor rotations)
 
@@ -49,11 +98,6 @@ namespace wayfinder {
 		} else {
 			return fabs(currentRotationsLeft) > fabs(currentRotationsRight) ? currentRotationsLeft : currentRotationsRight; // else use whichever encoder has a value or has a bigger value than the other (encoder might disconnect during match)
 		}
-
-		// std::cout << "Rotations left: " << currentRotationsLeft << std::endl;
-		// std::cout << "Rotations right: " << currentRotationsRight << std::endl;
- 
-		// return ((currentRotationsLeft + currentRotationsRight)/2); // If both encoders are detected (not 0) use average
 	}
 
 	double RobotControl::currentLocation_M(Config &config) {
@@ -72,8 +116,6 @@ namespace wayfinder {
 		} else {
 			return fabs(currentMetersLeft) > fabs(currentMetersRight) ? currentMetersLeft : currentMetersRight; // else use whichever encoder has a value or has a bigger value than the other (encoder might disconnect during match)
 		}
-
-		// return ((currentMetersLeft + currentMetersRight)/2); // If both encoders are detected (not 0) use average
 	}
 
 	double RobotControl::gyroFollow(sPath path, double dt, Config &config) {
