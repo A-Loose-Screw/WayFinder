@@ -32,8 +32,8 @@ namespace wayfinder {
 
 	void RobotControl::testDrivePID(double dt, Config &config, double meters2drive) {
 		double goalRotations = (meters2drive/(M_PI * config.wheelDiameter));
-		double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, true);
-		double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, true);
+		double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, false);
+		double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, false);
 		
 		leftSpeed *= config.maxSpeed;
 		rightSpeed *= config.maxSpeed;
@@ -62,8 +62,8 @@ namespace wayfinder {
 
 		angleSpeed *= config.maxTurnSpeed;
 
-		double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
-		double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config);
+		double leftSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, false);
+		double rightSpeed = internalPID(dt, goalRotations, currentLocation_R(config, true), config, false);
 		
 		leftSpeed += angleSpeed;
 		rightSpeed -= angleSpeed;
