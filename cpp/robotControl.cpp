@@ -27,6 +27,7 @@ namespace wayfinder {
 		// Just in case the PID is a bit wack. (make sure value is between -1 and 1)
 		output = std::max(output, -1.0);
 		output = std::min(output, 1.0);
+
 		return output;
 	}
 
@@ -38,6 +39,9 @@ namespace wayfinder {
 		leftSpeed *= config.maxSpeed;
 		rightSpeed *= config.maxSpeed;
 
+		nt::NetworkTableInstance::GetDefault().GetTable("WayFinder")->GetEntry("leftSpeed").SetDouble(leftSpeed);
+		nt::NetworkTableInstance::GetDefault().GetTable("WayFinder")->GetEntry("rightSpeed").SetDouble(rightSpeed);
+
 		config.drivetrain->Set(leftSpeed, rightSpeed);
 	}
 
@@ -48,6 +52,8 @@ namespace wayfinder {
 		angleSpeed *= config.maxTurnSpeed;
 		leftSpeed += angleSpeed;
 		rightSpeed -= angleSpeed;
+
+		nt::NetworkTableInstance::GetDefault().GetTable("WayFinder")->GetEntry("angleSpeed").SetDouble(angleSpeed);
 
 		config.drivetrain->Set(leftSpeed, rightSpeed);
 	}
@@ -70,6 +76,12 @@ namespace wayfinder {
 
 		leftSpeed *= config.maxSpeed;
 		rightSpeed *= config.maxSpeed;
+
+		// Networking
+		nt::NetworkTableInstance::GetDefault().GetTable("WayFinder")->GetEntry("leftSpeed").SetDouble(leftSpeed);
+		nt::NetworkTableInstance::GetDefault().GetTable("WayFinder")->GetEntry("rightSpeed").SetDouble(rightSpeed);
+		nt::NetworkTableInstance::GetDefault().GetTable("WayFinder")->GetEntry("angleSpeed").SetDouble(angleSpeed);
+
 
 		config.drivetrain->Set(leftSpeed, rightSpeed);
 	}
@@ -137,10 +149,11 @@ namespace wayfinder {
 			// PID left right speeds
 			double leftSpeed = internalPID(dt, _rotationsToTarget, currentLocation_R(config), config, false);
 			double rightSpeed = internalPID(dt, _rotationsToTarget, currentLocation_R(config), config, false);
+			double turnSpeed = gyroFollow(path, dt, config);
 
 			// gyro follow
-			leftSpeed += gyroFollow(path, dt, config);
-			rightSpeed -= gyroFollow(path, dt, config);
+			leftSpeed += turnSpeed;
+			rightSpeed -= turnSpeed;
 
 			// If reversed
 			leftSpeed = reverse ? inverse(leftSpeed) : leftSpeed;
@@ -149,6 +162,11 @@ namespace wayfinder {
 			// Limit power based on max speed (-1 to 1)
 			leftSpeed *= config.maxSpeed;
 			rightSpeed *= config.maxSpeed;
+
+			// Network Tables
+			nt::NetworkTableInstance::GetDefault().GetTable("WayFinder")->GetEntry("leftSpeed").SetDouble(leftSpeed);
+			nt::NetworkTableInstance::GetDefault().GetTable("WayFinder")->GetEntry("rightSpeed").SetDouble(rightSpeed);
+			nt::NetworkTableInstance::GetDefault().GetTable("WayFinder")->GetEntry("angleSpeed").SetDouble(turnSpeed);
 
 			// Set Drivetrain
 			config.drivetrain->Set(leftSpeed, rightSpeed); // Set Drivetrain

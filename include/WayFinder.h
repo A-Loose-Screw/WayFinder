@@ -35,9 +35,13 @@ namespace wayfinder {
 			config.drivetrain->Set(leftSpeed, rightSpeed);
 		}
 
+		/**
+		 * Get config
+		 */
 		Config *getConfig() {
 			return &_config;
 		}
+		
 	private:
 		Config &_config;
 	};

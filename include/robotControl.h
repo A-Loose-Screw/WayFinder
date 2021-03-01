@@ -1,5 +1,7 @@
 #include "Drivetrain.h"
 #include "path.h"
+#include "NTProvider.h"
+
 namespace wayfinder {
 	class RobotControl : public Path {
 	public:
